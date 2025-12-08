@@ -1,0 +1,112 @@
+package sapoCasaPrincesas.registro_login.usuarios.service;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import sapoCasaPrincesas.registro_login.usuarios.dao.UsuarioDao;
+import sapoCasaPrincesas.registro_login.usuarios.model.Usuario;
+
+import java.util.List;
+
+@Service
+public class UsuarioService {
+
+    private final UsuarioDao usuarioDao;
+    private final PasswordEncoder passwordEncoder;
+
+    public UsuarioService(UsuarioDao usuarioDao, PasswordEncoder passwordEncoder) {
+        this.usuarioDao = usuarioDao;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public List<Usuario> obtenerTodos() {
+        return usuarioDao.obtenerTodos();
+    }
+
+    public Usuario obtenerPorId(Long id) {
+        return usuarioDao.obtenerPorId(id);
+    }
+
+    public boolean crear(Usuario usuario) {
+        try {
+            System.out.println("Intentando crear usuario: " + usuario.getEmail());
+
+            // Verificar si el email ya existe
+            List<Usuario> existentes = usuarioDao.obtenerTodos();
+            for (Usuario u : existentes) {
+                if (u.getEmail().equals(usuario.getEmail())) {
+                    System.out.println("Email duplicado: " + usuario.getEmail());
+                    return false;
+                }
+            }
+
+            // Cifrar la contraseña
+            String hash = passwordEncoder.encode(usuario.getPasswordHash());
+            usuario.setPasswordHash(hash);
+
+            boolean resultado = usuarioDao.crear(usuario) > 0;
+            System.out.println("Resultado DAO: " + resultado);
+            return resultado;
+
+        } catch (Exception e) {
+            System.out.println("ERROR al crear usuario:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean actualizar(Usuario usuario) {
+        try {
+            String hash = passwordEncoder.encode(usuario.getPasswordHash());
+            usuario.setPasswordHash(hash);
+            return usuarioDao.actualizar(usuario) > 0;
+        } catch (Exception e) {
+            System.out.println("ERROR al actualizar usuario:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean eliminar(Long id) {
+        try {
+            return usuarioDao.eliminar(id) > 0;
+        } catch (Exception e) {
+            System.out.println("ERROR al eliminar usuario con ID: " + id);
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Usuario login(String email, String rawPassword) {
+        try {
+            List<Usuario> usuarios = usuarioDao.obtenerTodos();
+            for (Usuario u : usuarios) {
+                if (u.getEmail().equals(email) &&
+                        passwordEncoder.matches(rawPassword, u.getPasswordHash())) {
+                    System.out.println("Login exitoso para: " + email);
+                    return u;
+                }
+            }
+            System.out.println("Login fallido para: " + email);
+            return null;
+        } catch (Exception e) {
+            System.out.println("ERROR en login:");
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
