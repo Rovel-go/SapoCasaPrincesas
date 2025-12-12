@@ -28,13 +28,22 @@ public class UsuarioService {
 
     public boolean crear(Usuario usuario) {
         try {
-            System.out.println("Intentando crear usuario: " + usuario.getEmail());
+            // Validaciones básicas
+            if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
+                System.out.println("❌ ERROR: El email está vacío.");
+                return false;
+            }
+
+            if (usuario.getPasswordHash() == null || usuario.getPasswordHash().trim().isEmpty()) {
+                System.out.println("❌ ERROR: La contraseña está vacía.");
+                return false;
+            }
 
             // Verificar si el email ya existe
             List<Usuario> existentes = usuarioDao.obtenerTodos();
             for (Usuario u : existentes) {
-                if (u.getEmail().equals(usuario.getEmail())) {
-                    System.out.println("Email duplicado: " + usuario.getEmail());
+                if (u.getEmail().equalsIgnoreCase(usuario.getEmail())) {
+                    System.out.println("❌ ERROR: El email ya está registrado: " + usuario.getEmail());
                     return false;
                 }
             }
@@ -43,12 +52,18 @@ public class UsuarioService {
             String hash = passwordEncoder.encode(usuario.getPasswordHash());
             usuario.setPasswordHash(hash);
 
-            boolean resultado = usuarioDao.crear(usuario) > 0;
-            System.out.println("Resultado DAO: " + resultado);
-            return resultado;
+            // Intentar guardar en la BD
+            int resultado = usuarioDao.crear(usuario);
+            if (resultado > 0) {
+                System.out.println("✅ Usuario creado correctamente: " + usuario.getEmail());
+                return true;
+            } else {
+                System.out.println("❌ ERROR: Falló la inserción en la BD.");
+                return false;
+            }
 
         } catch (Exception e) {
-            System.out.println("ERROR al crear usuario:");
+            System.out.println("❌ ERROR inesperado al crear usuario:");
             e.printStackTrace();
             return false;
         }
@@ -56,11 +71,30 @@ public class UsuarioService {
 
     public boolean actualizar(Usuario usuario) {
         try {
+            if (usuario.getId() == null) {
+                System.out.println("❌ ERROR: No se puede actualizar sin ID.");
+                return false;
+            }
+
+            if (usuario.getPasswordHash() == null || usuario.getPasswordHash().trim().isEmpty()) {
+                System.out.println("❌ ERROR: La contraseña está vacía.");
+                return false;
+            }
+
             String hash = passwordEncoder.encode(usuario.getPasswordHash());
             usuario.setPasswordHash(hash);
-            return usuarioDao.actualizar(usuario) > 0;
+
+            int resultado = usuarioDao.actualizar(usuario);
+            if (resultado > 0) {
+                System.out.println("✅ Usuario actualizado correctamente: " + usuario.getEmail());
+                return true;
+            } else {
+                System.out.println("❌ ERROR: No se encontró usuario con ID " + usuario.getId());
+                return false;
+            }
+
         } catch (Exception e) {
-            System.out.println("ERROR al actualizar usuario:");
+            System.out.println("❌ ERROR al actualizar usuario:");
             e.printStackTrace();
             return false;
         }
@@ -68,9 +102,16 @@ public class UsuarioService {
 
     public boolean eliminar(Long id) {
         try {
-            return usuarioDao.eliminar(id) > 0;
+            int resultado = usuarioDao.eliminar(id);
+            if (resultado > 0) {
+                System.out.println("✅ Usuario eliminado con ID: " + id);
+                return true;
+            } else {
+                System.out.println("❌ ERROR: No se encontró usuario con ID " + id);
+                return false;
+            }
         } catch (Exception e) {
-            System.out.println("ERROR al eliminar usuario con ID: " + id);
+            System.out.println("❌ ERROR al eliminar usuario con ID: " + id);
             e.printStackTrace();
             return false;
         }
@@ -80,21 +121,23 @@ public class UsuarioService {
         try {
             List<Usuario> usuarios = usuarioDao.obtenerTodos();
             for (Usuario u : usuarios) {
-                if (u.getEmail().equals(email) &&
+                if (u.getEmail().equalsIgnoreCase(email) &&
                         passwordEncoder.matches(rawPassword, u.getPasswordHash())) {
-                    System.out.println("Login exitoso para: " + email);
+                    System.out.println("✅ Login exitoso para: " + email);
                     return u;
                 }
             }
-            System.out.println("Login fallido para: " + email);
+            System.out.println("❌ Login fallido para: " + email);
             return null;
         } catch (Exception e) {
-            System.out.println("ERROR en login:");
+            System.out.println("❌ ERROR en login:");
             e.printStackTrace();
             return null;
         }
     }
 }
+
+
 
 
 
