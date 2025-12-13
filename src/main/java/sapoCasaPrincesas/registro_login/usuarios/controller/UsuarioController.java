@@ -1,12 +1,12 @@
 package sapoCasaPrincesas.registro_login.usuarios.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sapoCasaPrincesas.registro_login.usuarios.model.Usuario;
 import sapoCasaPrincesas.registro_login.usuarios.service.UsuarioService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -18,83 +18,86 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    // Endpoint de prueba
-    @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Backend funcionando correctamente 🚀");
-    }
-
-    // Crear usuario
-    @PostMapping
-    public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
-        boolean creado = usuarioService.crear(usuario);
-        if (creado) {
-            return ResponseEntity.ok(Map.of("mensaje", "✅ Usuario creado correctamente"));
-        } else {
-            return ResponseEntity.badRequest().body(Map.of("mensaje", "❌ Error al crear usuario. Verifica email único y contraseña válida."));
-        }
-    }
-
-    // Listar usuarios
+    // GET /usuarios → lista todos
     @GetMapping
     public ResponseEntity<List<Usuario>> obtenerTodos() {
-        return ResponseEntity.ok(usuarioService.obtenerTodos());
+        List<Usuario> usuarios = usuarioService.obtenerTodos();
+        return ResponseEntity.ok(usuarios);
     }
 
-    // Obtener usuario por ID
+    // GET /usuarios/{id} → obtiene uno por ID
     @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerPorId(@PathVariable Long id) {
+    public ResponseEntity<Usuario> obtenerPorId(@PathVariable Long id) {
         Usuario usuario = usuarioService.obtenerPorId(id);
         if (usuario != null) {
             return ResponseEntity.ok(usuario);
         } else {
-            return ResponseEntity.badRequest().body(Map.of("mensaje", "❌ Usuario no encontrado con ID: " + id));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
-    // Actualizar usuario
-    @PutMapping
-    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario) {
-        boolean actualizado = usuarioService.actualizar(usuario);
-        if (actualizado) {
-            return ResponseEntity.ok(Map.of("mensaje", "✅ Usuario actualizado correctamente"));
+    // POST /usuarios → crea usuario
+    @PostMapping
+    public ResponseEntity<String> crear(@RequestBody Usuario usuario) {
+        boolean creado = usuarioService.crear(usuario);
+        if (creado) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("✅ Usuario creado correctamente");
         } else {
-            return ResponseEntity.badRequest().body(Map.of("mensaje", "❌ Error al actualizar usuario. Verifica ID y datos enviados."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ Error al crear usuario");
         }
     }
 
-    // Eliminar usuario
+    // PUT /usuarios/{id} → actualiza usuario
+    @PutMapping("/{id}")
+    public ResponseEntity<String> actualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
+        usuario.setId(id); // asegura que el ID del path se use
+        boolean actualizado = usuarioService.actualizar(id, usuario);
+        if (actualizado) {
+            return ResponseEntity.ok("✅ Usuario actualizado correctamente");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ Error al actualizar usuario");
+        }
+    }
+
+    // DELETE /usuarios/{id} → elimina usuario
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarUsuario(@PathVariable Long id) {
+    public ResponseEntity<String> eliminar(@PathVariable Long id) {
         boolean eliminado = usuarioService.eliminar(id);
         if (eliminado) {
-            return ResponseEntity.ok(Map.of("mensaje", "✅ Usuario eliminado correctamente con ID: " + id));
+            return ResponseEntity.ok("✅ Usuario eliminado correctamente");
         } else {
-            return ResponseEntity.badRequest().body(Map.of("mensaje", "❌ Error al eliminar usuario. ID no encontrado: " + id));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("❌ Usuario no encontrado");
         }
     }
 
-    // Login mejorado: devuelve datos del usuario
+    // POST /usuarios/login → login con email y contraseña
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String contrasena) {
-        Usuario usuario = usuarioService.login(email, contrasena);
-        if (usuario != null) {
-            return ResponseEntity.ok(
-                    Map.of(
-                            "mensaje", "✅ Login exitoso",
-                            "usuario", Map.of(
-                                    "id", usuario.getId(),
-                                    "nombre", usuario.getNombre(),
-                                    "apellidos", usuario.getApellidos(),
-                                    "email", usuario.getEmail()
-                            )
-                    )
-            );
+    public ResponseEntity<?> login(@RequestBody Usuario usuario) {
+        if (usuario.getEmail() == null || usuario.getContrasena() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ Faltan email o contraseña en el body");
+        }
+
+        Usuario u = usuarioService.login(usuario.getEmail(), usuario.getContrasena());
+        if (u != null) {
+            return ResponseEntity.ok(u);
         } else {
-            return ResponseEntity.badRequest().body(Map.of("mensaje", "❌ Login fallido. Email o contraseña incorrectos"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("❌ Login fallido: email o contraseña incorrectos");
         }
     }
 }
+
+
+
+
+
+
+
 
 
 

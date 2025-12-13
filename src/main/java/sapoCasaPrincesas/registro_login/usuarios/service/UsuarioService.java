@@ -18,23 +18,25 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // GET todos
     public List<Usuario> obtenerTodos() {
         return usuarioDao.obtenerTodos();
     }
 
+    // GET por ID
     public Usuario obtenerPorId(Long id) {
         return usuarioDao.obtenerPorId(id);
     }
 
+    // POST crear
     public boolean crear(Usuario usuario) {
         try {
-            // Validaciones básicas
             if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
                 System.out.println("❌ ERROR: El email está vacío.");
                 return false;
             }
 
-            if (usuario.getPasswordHash() == null || usuario.getPasswordHash().trim().isEmpty()) {
+            if (usuario.getContrasena() == null || usuario.getContrasena().trim().isEmpty()) {
                 System.out.println("❌ ERROR: La contraseña está vacía.");
                 return false;
             }
@@ -48,11 +50,10 @@ public class UsuarioService {
                 }
             }
 
-            // Cifrar la contraseña
-            String hash = passwordEncoder.encode(usuario.getPasswordHash());
+            // Cifrar la contraseña recibida en el JSON
+            String hash = passwordEncoder.encode(usuario.getContrasena());
             usuario.setPasswordHash(hash);
 
-            // Intentar guardar en la BD
             int resultado = usuarioDao.crear(usuario);
             if (resultado > 0) {
                 System.out.println("✅ Usuario creado correctamente: " + usuario.getEmail());
@@ -69,19 +70,20 @@ public class UsuarioService {
         }
     }
 
-    public boolean actualizar(Usuario usuario) {
+    // PUT actualizar
+    public boolean actualizar(Long id, Usuario usuario) {
         try {
             if (usuario.getId() == null) {
                 System.out.println("❌ ERROR: No se puede actualizar sin ID.");
                 return false;
             }
 
-            if (usuario.getPasswordHash() == null || usuario.getPasswordHash().trim().isEmpty()) {
+            if (usuario.getContrasena() == null || usuario.getContrasena().trim().isEmpty()) {
                 System.out.println("❌ ERROR: La contraseña está vacía.");
                 return false;
             }
 
-            String hash = passwordEncoder.encode(usuario.getPasswordHash());
+            String hash = passwordEncoder.encode(usuario.getContrasena());
             usuario.setPasswordHash(hash);
 
             int resultado = usuarioDao.actualizar(usuario);
@@ -100,6 +102,7 @@ public class UsuarioService {
         }
     }
 
+    // DELETE eliminar
     public boolean eliminar(Long id) {
         try {
             int resultado = usuarioDao.eliminar(id);
@@ -117,6 +120,7 @@ public class UsuarioService {
         }
     }
 
+    // LOGIN
     public Usuario login(String email, String rawPassword) {
         try {
             List<Usuario> usuarios = usuarioDao.obtenerTodos();
@@ -136,6 +140,15 @@ public class UsuarioService {
         }
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 

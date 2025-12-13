@@ -12,15 +12,18 @@ public class Usuario {
 
     private String nombre;
     private String apellidos;
+
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Transient // no se guarda en la BD
-    private String contrasena;
-
+    // Contraseña cifrada que se guarda en la BD
     private String passwordHash;
 
-    // Getters y Setters...
+    // Campo transitorio: se recibe en el JSON pero no se persiste directamente
+    @Transient
+    private String contrasena;
 
+    // Getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -33,15 +36,18 @@ public class Usuario {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getContrasena() { return contrasena; }
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-        this.passwordHash = contrasena;
-    }
-
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 }
+
+
+
+
+
+
 
 
 
