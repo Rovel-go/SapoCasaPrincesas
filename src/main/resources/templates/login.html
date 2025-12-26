@@ -3,33 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+
+    <style>
+        .error-msg { color: red; font-size: 0.9em; }
+        .ok-msg { color: green; font-size: 0.9em; }
+        label { font-weight: bold; }
+    </style>
 </head>
 <body>
 
 <h2>Iniciar sesión</h2>
 
-<div th:if="${param.error}">
-    <p style="color:red;">Credenciales incorrectas</p>
+<div th:if="${param.registro == 'exito'}" class="ok-msg">
+    Registro exitoso. Ahora puede iniciar sesión.
 </div>
 
-<div th:if="${param.logout}">
-    <p style="color:green;">Sesión cerrada correctamente</p>
+<div th:if="${param.error}" class="error-msg">
+    Credenciales incorrectas.
 </div>
 
 <form th:action="@{/login}" method="post">
-    <label>Email:</label>
-    <input type="text" name="username" required>
 
+    <label>Email:</label><br>
+    <input type="email" name="username" required>
     <br/>
 
-    <label>Contraseña:</label>
+    <label>Contraseña:</label><br>
     <input type="password" name="password" required>
-
     <br/>
 
-    <button type="submit">Iniciar Sesion</button>
+    <button type="submit">Ingresar</button>
 </form>
+
+<p>
+    <a th:href="@{/registro}">Crear una cuenta</a>
+</p>
 
 </body>
 </html>
+
+
+
+
 

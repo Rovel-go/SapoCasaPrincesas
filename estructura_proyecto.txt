@@ -1,101 +1,125 @@
 Folder PATH listing
 Volume serial number is 5A6C-B4BB
 C:.
-¦   .gitattributes
-¦   .gitignore
-¦   estructura_proyecto.txt
-¦   HELP.md
-¦   mvnw
-¦   mvnw.cmd
-¦   pom.xml
-¦   registro_login.iml
-¦   
+|   .gitattributes
+|   .gitignore
+|   estructura_proyecto
+|   estructura_proyecto.txt
+|   HELP.md
+|   mvnw
+|   mvnw.cmd
+|   pom.xml
+|   registro_login.iml
+|   
 +---.idea
-¦   ¦   .gitignore
-¦   ¦   compiler.xml
-¦   ¦   encodings.xml
-¦   ¦   jarRepositories.xml
-¦   ¦   misc.xml
-¦   ¦   vcs.xml
-¦   ¦   workspace.xml
-¦   ¦   
-¦   +---libraries
-¦           javax_servlet_api.xml
-¦           
+|   |   .gitignore
+|   |   compiler.xml
+|   |   encodings.xml
+|   |   jarRepositories.xml
+|   |   misc.xml
+|   |   vcs.xml
+|   |   workspace.xml
+|   |   
+|   \---libraries
+|           javax_servlet_api.xml
+|           
 +---.mvn
-¦   +---wrapper
-¦           maven-wrapper.properties
-¦           
+|   \---wrapper
+|           maven-wrapper.properties
+|           
++---.smarttomcat
+|   \---registro_login
+|       \---conf
+|           |   catalina.policy
+|           |   catalina.properties
+|           |   context.xml
+|           |   jaspic-providers.xml
+|           |   jaspic-providers.xsd
+|           |   logging.properties
+|           |   server.xml
+|           |   tomcat-users.xml
+|           |   tomcat-users.xsd
+|           |   web.xml
+|           |   
+|           \---Catalina
+|               \---localhost
 +---src
-¦   +---main
-¦       +---java
-¦       ¦   +---sapoCasaPrincesas
-¦       ¦       +---registro_login
-¦       ¦           +---servlets
-¦       ¦                   DashboardServlet.java
-¦       ¦                   LoginServlet.java
-¦       ¦                   RegistroServlet.java
-¦       ¦                   
-¦       +---resources
-¦       ¦       application.properties
-¦       ¦       
-¦       +---webapp
-¦           ¦   Dashboard.jsp
-¦           ¦   index.jsp
-¦           ¦   Login.jsp
-¦           ¦   Registro.jsp
-¦           ¦   
-¦           +---WEB-INF
-¦                   web.xml
-¦                   
-+---target
-    ¦   registro_login.war
-    ¦   
+|   \---main
+|       +---java
+|       |   \---sapoCasaPrincesas
+|       |       \---registro_login
+|       |           |   RegistroLoginApplication.java
+|       |           |   
+|       |           +---config
+|       |           +---controller
+|       |           |       DashboardController.java
+|       |           |       LoginController.java
+|       |           |       UsuarioController.java
+|       |           |       VistaController.java
+|       |           |       
+|       |           +---model
+|       |           |       Usuario.java
+|       |           |       
+|       |           +---repository
+|       |           |       UsuarioRepository.java
+|       |           |       
+|       |           +---security
+|       |           |       CustomUserDetailsService.java
+|       |           |       SecurityConfig.java
+|       |           |       
+|       |           \---service
+|       |                   UsuarioService.java
+|       |                   
+|       +---resources
+|       |   |   application.properties
+|       |   |   
+|       |   \---templates
+|       |           dashboard.html
+|       |           login.html
+|       |           registro.html
+|       |           VistaLogin.html
+|       |           
+|       \---webapp
+|           \---WEB-INF
+\---target
     +---classes
-    ¦   ¦   application.properties
-    ¦   ¦   
-    ¦   +---sapoCasaPrincesas
-    ¦       +---registro_login
-    ¦           +---servlets
-    ¦                   DashboardServlet.class
-    ¦                   LoginServlet.class
-    ¦                   RegistroServlet.class
-    ¦                   
+    |   |   application.properties
+    |   |   
+    |   +---sapoCasaPrincesas
+    |   |   \---registro_login
+    |   |       |   RegistroLoginApplication.class
+    |   |       |   
+    |   |       +---controller
+    |   |       |       DashboardController.class
+    |   |       |       LoginController.class
+    |   |       |       UsuarioController.class
+    |   |       |       VistaController.class
+    |   |       |       
+    |   |       +---model
+    |   |       |       Usuario.class
+    |   |       |       
+    |   |       +---repository
+    |   |       |       UsuarioRepository.class
+    |   |       |       
+    |   |       +---security
+    |   |       |       CustomUserDetailsService.class
+    |   |       |       SecurityConfig.class
+    |   |       |       
+    |   |       \---service
+    |   |               UsuarioService.class
+    |   |               
+    |   \---templates
+    |           dashboard.html
+    |           login.html
+    |           registro.html
+    |           VistaLogin.html
+    |           
     +---generated-sources
-    ¦   +---annotations
-    +---maven-archiver
-    ¦       pom.properties
-    ¦       
-    +---maven-status
-    ¦   +---maven-compiler-plugin
-    ¦       +---compile
-    ¦           +---default-compile
-    ¦                   createdFiles.lst
-    ¦                   inputFiles.lst
-    ¦                   
-    +---registro_login
-        ¦   index.jsp
-        ¦   
-        +---META-INF
-        +---WEB-INF
-            ¦   web.xml
-            ¦   
-            +---classes
-            ¦   ¦   application.properties
-            ¦   ¦   
-            ¦   +---sapoCasaPrincesas
-            ¦       +---registro_login
-            ¦           +---servlets
-            ¦                   DashboardServlet.class
-            ¦                   LoginServlet.class
-            ¦                   RegistroServlet.class
-            ¦                   
-            +---jsp
-            ¦       Dashboard.jsp
-            ¦       Login.jsp
-            ¦       Registro.jsp
-            ¦       
-            +---lib
-                    jbcrypt-0.4.jar
-                    jstl-1.2.jar
-                    
+    |   \---annotations
+    \---maven-status
+        \---maven-compiler-plugin
+            \---compile
+                \---default-compile
+                        createdFiles.lst
+                        inputFiles.lst
+                        
