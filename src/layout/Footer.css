@@ -1,0 +1,43 @@
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  background-color: rgb(25, 18, 30);
+}
+
+.nosotros {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  align-items: center;
+}
+
+.lista-nosotros {
+  list-style: none;
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.lista-nosotros a {
+  color: #2589b6;
+  text-decoration: none;
+  font-size: clamp(1rem, 10vw + 2rem, 2rem);
+  transition: 0.3s ease;
+}
+
+.lista-nosotros a:hover {
+  color: #b6ed0d;
+  font-weight: bold;
+  transform: scale(1.1);
+}
+
+/* Footer deshabilitado en login y registro */
+.footer-disabled {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: default;
+}
