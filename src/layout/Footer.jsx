@@ -1,8 +1,6 @@
-import "./Footer.css";
-
 function Footer({ className = "" }) {
   return (
-    <footer className={`footer ${className}`}>
+    <footer className={className ? `footer ${className}` : "footer"}>
       <div className="nosotros">
         <ul className="lista-nosotros">
           <li>

@@ -1,52 +1,110 @@
+/*===CONTENEDOR PRINCIPAL === */
+
 .registro-container {
-  max-width: 400px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: rgb(25, 18, 30);
-  border-radius: 8px;
-  color: white;
-}
-
-.registro-container h2 {
-  margin-bottom: 1rem;
-}
-
-.registro-container p {
-  color: #6bed0d;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.registro-container form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  align-items: center;
+  width: 100%;
 }
 
-.registro-container input {
-  border: none;
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #2589b6;
-  font-size: clamp(2rem, 1vw + 0.5rem, 3rem);
-  height: 4rem;
+/* ===========================
+TÍTULO
+=========================== */
+
+.titulo-cuenta {
+  text-align: center;
+  color: #b6ed0d;
+  font-size: clamp(2rem, 10vw + 2rem, 3rem);
+  display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* ===========================
+FORMULARIO DE REGISTRO
+=========================== */
+
+.formulario-registro {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* ===========================
+INPUTS
+=========================== */
+
+.formulario-registro input {
+  border: none;
+  width: 100%;
+  padding: 0.25rem;
+  background-color: #2589b6;
+  font-size: clamp(2rem, 10vw + 2rem, 2rem);
   text-align: center;
   border-radius: 12px;
   color: #fff;
+  box-sizing: border-box;
 }
 
-.registro-container button {
-  padding: 0.8rem;
-  background-color: rgb(25, 18, 30);
+.formulario-registro input::placeholder {
+  color: #000;
+}
+
+btn-registro {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: transparent;
   border: none;
-  color: #6bed0d;
-  border-radius: 4px;
   cursor: pointer;
 }
 
-.registro-container button:hover {
-  background: #ff85c2;
+.btn-registro i {
+  color: fuchsia;
+  font-size: clamp(2rem, 10vw + 2rem, 3rem);
+  transition: transform 0.3s ease;
+}
+
+.btn-registro:hover i {
+  transform: scale(1.2);
+}
+
+.Registro {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.cuenta {
+  text-align: center;
+  color: #fff;
+  font-size: clamp(1rem, 6vw + 1rem, 2rem);
+}
+
+.cuenta a {
+  color: #fff;
+  font-size: clamp(1rem, 6vw + 1rem, 2.5rem);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.cuenta a:hover {
+  color: #cf47b3;
+}
+
+.ingresar {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.leyenda-ingresar {
+  color: #6bed0d;
+  font-size: clamp(2rem, 12vw + 2rem, 2.5rem);
 }

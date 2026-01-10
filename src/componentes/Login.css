@@ -9,7 +9,6 @@ CONTENEDOR PRINCIPAL
   width: 100%;
 }
 
-
 /* ===========================
 TÍTULO LOGIN
 =========================== */
@@ -22,7 +21,6 @@ TÍTULO LOGIN
   justify-content: center;
   align-items: center;
 }
-
 
 /* ===========================
 FORMULARIO LOGIN
@@ -55,7 +53,6 @@ FORMULARIO LOGIN
   color: #000;
 }
 
-
 /* ===========================
 BOTÓN LOGIN
 =========================== */
@@ -78,7 +75,6 @@ BOTÓN LOGIN
 .btn-login:hover i {
   transform: scale(1.2);
 }
-
 
 /* ===========================
 OLVIDÉ CONTRASEÑA
@@ -103,7 +99,6 @@ OLVIDÉ CONTRASEÑA
   transform: scale(1.2);
 }
 
-
 /* ===========================
 CREAR CUENTA
 =========================== */
@@ -127,194 +122,4 @@ CREAR CUENTA
 
 .link-registro:hover {
   color: #cf47b3;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*.grid-login {
-
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100vw;
-  gap: 1rem;
-  flex: 1;
-}
-
-.titulo-login,
-.titulo-cuenta {
-  text-align: center;
-  color: #b6ed0d;
-  font-size: clamp(2rem, 2vw + 1rem, 3rem);
-}
-
-.formulario-login,
-.formulario-registro {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-  padding: 2rem;
-}
-
-input {
-  border: none;
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #2589b6;
-  font-size: clamp(2rem, 1vw + 0.5rem, 3rem);
-  height: 4rem;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  border-radius: 12px;
-  color: #fff;
-}
-
-input::placeholder {
-  color: #000;
-}
-
-.usuario-contraseña,
-.datos-personales {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.grid-login button {
-  align-self: center;
-  width: 40%;
-  height: 10rem;
-  border-radius: 2rem;
-  background-color: #b6ad75;
-  border-color: seashell;
-  color: #251830;
-  font-size: clamp(2rem, 1vw + 1rem, 3rem);
-  cursor: pointer;
-  margin-top: 5rem;
-}
-#inicio_sesion a {
-  text-decoration-line: none;
-}
-
-#inicio_sesion a:hover {
-  color: #e9d137;
-}
-
-.olvide-contraseña {
-  text-align: right;
-  margin-right: 3rem;
-}
-
-.olvide-contraseña a {
-  color: #fff;
-  text-decoration: none;
-  font-size: clamp(1.5rem, 1vw + 1rem, 2rem);
-  transition: color 0.3s ease;
-}
-
-.olvide-contraseña a:hover {
-  color: #ef2804;
-}
-
-.solicitud-registro {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 5rem;
-  font-size: clamp(1.5rem, 2vw + 1rem, 3rem);
-}
-
-.solicitud-registro a {
-  color: #6bed0d;
-}
-
-.solicitud-registro a:hover {
-  color: #d26101;
-}
-.cuenta {
-  color: #fff;
-  font-size: clamp(1.5rem, 2vw + 1rem, 2rem);
-}
-
-/* ===========================
-   MEDIA QUERIES
-=========================== */
-
-/* 425px */
-/*@media screen and (max-width: 425px) {
-  /*.brand-content,*/
-  /*.menu-enlaces,*/
-  /*.menu-clasificador,
-  .formulario-login,
-  .formulario-registro,
-  footer ul {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  #conitem3,
-  #conitem4,
-  #conitem5 {
-    grid-template-columns: 1fr;
-  }
-
-  .sapo span {
-    font-size: 3rem;
-  }
-
-  .casa-princesas {
-    font-size: 1.2rem;
-  }
-}
-
-/* 768px */
-/*@media screen and (max-width: 768px) {
-  .brand-content {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .brand-assets {
-    align-items: center;
-  }
-}
-
-/* 1440px */
-/*@media screen and (min-width: 1440px) {
-  .contenido-principal {
-    max-width: 2000px;
-  }
-}
-
-/* 2560px */
-/*@media screen and (min-width: 2560px) {
-  .contenido-principal {
-    max-width: 2400px;
-    padding: 2rem 4rem;
-  }
-
-  #conitem3,
-  #conitem4,
-  #conitem5 {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 3rem;
-  }
 }

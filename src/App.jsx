@@ -1,28 +1,39 @@
-// Archivo principal de rutas de la aplicación.
-// Aquí se define la estructura de navegación usando React Router.
+// Aquí se organiza la navegación principal usando React Router.
 
 import { Routes, Route } from "react-router-dom";
-
-// El componente <Layout /> envuelve todas las páginas para compartir el header y el diseño general.
+// Layout general que envuelve todas las páginas con Header y Footer
 import Layout from "./layout/Layout";
-
+// Páginas
 import Login from "./componentes/Login";
-import Recuperar from "./componentes/Recuperar";
+import AdminContrasena from "./componentes/AdminContrasena"; // ← CORRECTO
 import Registro from "./componentes/Registro";
-
+import Home from "./componentes/Home";
+import Servicios from "./componentes/Servicios";
+import Salones from "./componentes/Salones";
+import Colaboradores from "./componentes/Colaboradores";
 function App() {
   return (
     <Routes>
-      {/* Ruta base que usa el layout general */}
+      {/* Todas las rutas comparten el Layout (Header + Footer + Outlet) */}
       <Route path="/" element={<Layout />}>
-        {/* Página principal: Login */}
+        {/* Página por defecto: Login */}
         <Route index element={<Login />} />
-
-        {/* Recuperar contraseña */}
-        <Route path="recuperar" element={<Recuperar />} />
-
-        {/* Página de Registro */}
+        {/* Ruta explícita para Login */}
+        <Route path="login" element={<Login />} />
+        {/* Flujo de recuperación de contraseña */}
+        <Route
+          path="recuperar"
+          element={<AdminContrasena modo="recuperar" />}
+        />
+        {/* Registro de nuevos usuarios */}
         <Route path="registro" element={<Registro />} />
+        {/* Páginas internas después del login */}
+        <Route path="home" element={<Home />} />
+        <Route path="servicios" element={<Servicios />} />
+        <Route path="salones" element={<Salones />} />
+        <Route path="colaboradores" element={<Colaboradores />} />
+        {/* Página para rutas no existentes */}
+        <Route path="*" element={<h2>Página no encontrada</h2>} />
       </Route>
     </Routes>
   );

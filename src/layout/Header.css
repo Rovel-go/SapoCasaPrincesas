@@ -1,27 +1,134 @@
 .header {
-  background-color: rgb(25, 18, 30);
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 1rem 0;
-  gap: 0.5rem;
+  padding-top: 5rem;
+  gap: 5rem;
 }
 
-.logo {
+/* Menú superior */
+.menu-enlaces {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 2rem;
+  gap: 1rem;
+  background-color: rgb(25, 18, 30);
+}
+
+#logo_home i,
+#logo_salir i {
+  color: #6bed0d;
+  font-size: clamp(2rem, 10vw + 1rem, 3rem);
+  transition: transform 0.3s ease;
+}
+
+#logo_home:hover i,
+#logo_salir:hover i {
+  transform: scale(1.2);
+}
+
+.home-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Redes sociales */
+.iconos-sociales {
+  display: flex;
+  gap: clamp(2rem, 10vw + 1rem, 3rem);
+  align-items: center;
+}
+
+.iconos-sociales i {
+  color: #2589b6;
+  font-size: clamp(2rem, 10vw + 1rem, 3rem);
+  transition: transform 0.3s ease;
+}
+
+.iconos-sociales .insta:hover i {
+  color: #cf47b3;
+}
+
+.iconos-sociales .tik-tok:hover i {
+  color: red;
+}
+
+.iconos-sociales .face:hover i {
+  color: #fff;
+}
+
+.iconos-sociales i:hover {
+  transform: scale(1.2);
+}
+
+/* Branding */
+.brand-content {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.princesita {
+  max-width: 35%;
+  overflow: hidden;
+  margin: 1rem;
+}
+
+.princesita img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.brand-assets {
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sapo {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.green {
+  color: #b6ed0d;
+  font-size: clamp(2rem, 10vw + 1rem, 7rem);
+}
+
+.red,
+.yellow,
+.orange {
+  font-size: clamp(2rem, 5vw + 1rem, 5rem);
+}
+
+.red {
+  color: #ef2804;
+}
+
+.yellow {
+  color: #e9d137;
+}
+
+.orange {
+  color: #d26101;
+}
+
+.slogan {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 2rem;
+}
+
+.casa-princesas {
   font-family: "Pacifico", cursive;
   color: #fff;
-  font-size: clamp(1rem, 1vw + 1rem, 3rem);
-}
-
-.nav a {
-  color: #2589b6;
-  text-decoration: none;
-  font-size: clamp(1rem, 1vw + 1rem, 3rem);
-  transition: 0.3s ease;
-}
-
-.nav a:hoover {
-  color: #b6ed0d;
-  transform: scale(1.2);
+  font-size: clamp(1rem, 10vw + 1rem, 3rem);
+  text-align: right;
 }
