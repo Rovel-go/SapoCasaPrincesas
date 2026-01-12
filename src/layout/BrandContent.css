@@ -1,0 +1,104 @@
+/* CONTENEDOR PRINCIPAL */
+.brand-content {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+
+  /* Permite que en pantallas pequeñas se apile */
+  flex-wrap: wrap;
+}
+
+/* IMAGEN PRINCESITA */
+.princesita {
+  max-width: clamp(180px, 35%, 420px); /* Más flexible */
+  overflow: hidden;
+  margin: 1rem;
+}
+
+.princesita img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* CONTENEDOR DE TEXTO */
+.brand-assets {
+  width: clamp(250px, 60%, 800px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* LOGO SAPO */
+.sapo {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+/* Colores y tamaños individuales */
+.green {
+  color: #b6ed0d;
+  font-size: clamp(2.5rem, 10vw, 7rem);
+}
+
+.red,
+.yellow,
+.orange {
+  font-size: clamp(2rem, 7vw, 5rem);
+}
+
+.red {
+  color: #ef2804;
+}
+.yellow {
+  color: #e9d137;
+}
+.orange {
+  color: #d26101;
+}
+
+/* SLOGAN */
+.slogan {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 2rem;
+}
+
+.casa-princesas {
+  font-family: "Pacifico", cursive;
+  color: #fff;
+  font-size: clamp(1.2rem, 6vw, 3rem);
+  text-align: right;
+  line-height: 1.2;
+}
+
+/* RESPONSIVIDAD EXTRA */
+@media (max-width: 700px) {
+  .brand-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .brand-assets {
+    width: 100%;
+    align-items: center;
+  }
+
+  .sapo {
+    justify-content: center;
+  }
+
+  .slogan {
+    justify-content: center;
+    padding-right: 0;
+  }
+
+  .casa-princesas {
+    text-align: center;
+  }
+}

@@ -1,0 +1,97 @@
+/* NAV PRINCIPAL */
+.menu-enlaces {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  padding: 1rem;
+  overflow-x: auto; /* Permite scroll horizontal en pantallas pequeñas */
+  gap: 2rem;
+  background-color: transparent;
+
+  scrollbar-width: none; /* Oculta scrollbar en Firefox */
+}
+
+.menu-enlaces::-webkit-scrollbar {
+  display: none; /* Oculta scrollbar en Chrome */
+}
+
+/* HOME */
+.logo-home {
+  display: flex; /* Antes estaba en none: ahora sí se muestra */
+  justify-content: center;
+  align-items: center;
+  cursor: pointer; /* Indica que es interactivo */
+}
+
+.logo-home svg {
+  font-size: clamp(2.4rem, 5vw, 5rem); /* Tamaño responsivo real */
+  color: #6bed0d; /* Color institucional */
+  transition: transform 0.3s ease; /* Suaviza el hover */
+}
+
+.logo-home:hover svg {
+  transform: scale(1.3); /* Efecto visual claro */
+}
+
+/* SALIR */
+.logo-salir {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer; /* Igual que el home */
+}
+
+.logo-salir svg {
+  font-size: clamp(2.4rem, 5vw, 5rem); /* Mantiene coherencia visual */
+  color: #6bed0d;
+  transition: transform 0.3s ease;
+}
+
+.logo-salir:hover svg {
+  transform: scale(1.3);
+}
+
+/* ICONOS SOCIALES */
+.iconos-sociales {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem; /* Separación amplia para iconos grandes */
+  align-items: center;
+}
+
+/* Cada icono */
+.iconos-sociales div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer; /* Indica interacción */
+  transition: transform 0.3s ease; /* Hover suave */
+  background-color: transparent; /* Evita cajas inesperadas */
+}
+
+/* Tamaño general de los iconos */
+.iconos-sociales svg {
+  font-size: clamp(2.4rem, 5vw, 5rem); /* Tamaño grande y responsivo */
+}
+
+/* Colores individuales */
+.icono-facebook svg {
+  color: #1877f2; /* Azul oficial */
+}
+
+.icono-instagram svg {
+  color: #8a3ab9; /* Morado característico */
+}
+
+.icono-tiktok svg {
+  color: #25f4ee; /* Azul TikTok */
+}
+
+/* Hover */
+.iconos-sociales div:hover {
+  transform: scale(1.3); /* Aumenta visibilidad al interactuar */
+  background-color: transparent; /* Garantiza que no aparezca fondo */
+}

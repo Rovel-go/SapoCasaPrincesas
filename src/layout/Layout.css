@@ -1,0 +1,38 @@
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.layout-header {
+  background-color: transparent;
+  padding: 1rem;
+  text-align: center;
+}
+
+.layout-main {
+  flex: 1;
+  padding: 2rem;
+  padding-inline: clamp(
+    1rem,
+    4vw,
+    3rem
+  ); /* Para evitar texto pegado al borde en panatllas pequeñas */
+}
+
+.layout-footer {
+  background-color: transparent;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* remplazar padding normal (mas grade) a un mas pequeño para moviles. */
+@media (max-width: 600px) {
+  .layout-main {
+    padding: 1.2rem;
+  }
+}
