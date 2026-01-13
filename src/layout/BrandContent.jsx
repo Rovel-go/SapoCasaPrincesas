@@ -15,10 +15,10 @@ function BrandContent() {
           <span className="yellow">p</span>
           <span className="orange">o</span>
         </div>
-      </div>
 
-      <div className="slogan">
-        <span className="casa-princesas">Casa de princesas!</span>
+        <div className="slogan">
+          <span className="casa-princesas">Casa de princesas!</span>
+        </div>
       </div>
     </div>
   );

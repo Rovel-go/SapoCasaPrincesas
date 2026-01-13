@@ -6,12 +6,13 @@
   align-items: center;
   flex-wrap: nowrap;
   width: 100%;
-  padding: 1rem;
+  padding: (0.2rem, 3vw, 4rem);
   overflow-x: auto; /* Permite scroll horizontal en pantallas pequeñas */
-  gap: 2rem;
+  gap: clamp(0.2rem, 3vw, 4rem);
   background-color: transparent;
 
   scrollbar-width: none; /* Oculta scrollbar en Firefox */
+  box-sizing: border-box;
 }
 
 .menu-enlaces::-webkit-scrollbar {
@@ -58,8 +59,9 @@
 .iconos-sociales {
   display: flex;
   flex-direction: row;
-  gap: 3rem; /* Separación amplia para iconos grandes */
+  gap: clamp(0.5rem, 3vw, 4rem); /* Separación amplia para iconos grandes */
   align-items: center;
+  box-sizing: border-box;
 }
 
 /* Cada icono */
@@ -67,6 +69,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0.2rem;
   cursor: pointer; /* Indica interacción */
   transition: transform 0.3s ease; /* Hover suave */
   background-color: transparent; /* Evita cajas inesperadas */
@@ -74,7 +77,7 @@
 
 /* Tamaño general de los iconos */
 .iconos-sociales svg {
-  font-size: clamp(2.4rem, 5vw, 5rem); /* Tamaño grande y responsivo */
+  font-size: clamp(1.6rem, 5vw, 5rem); /* Tamaño grande y responsivo */
 }
 
 /* Colores individuales */

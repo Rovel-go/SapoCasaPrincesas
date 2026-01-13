@@ -1,14 +1,10 @@
-* {
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  width: 100%;
+  min-height: 100%;
 }
-
-:root {
-  font-size: 10px;
-}
-
-body {
-  font-family: sans-serif;
-  /*background-color: rgb(25, 18, 30);*/
+* {
 }

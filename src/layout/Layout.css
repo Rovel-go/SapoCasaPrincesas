@@ -1,11 +1,18 @@
 .layout-container {
-  display: flex;
+  display: block;
+  position: relative;
   flex-direction: column;
+  width: 100%;
+  max-width: 2000px;
   min-height: 100vh;
+  margin: 0 auto;
 
+  background-image: url("../assets/imagenes/fondo.png"); /* usa tu ruta real */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
+  outline: 5px solid red;
 }
 
 .layout-header {
