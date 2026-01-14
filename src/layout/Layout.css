@@ -1,43 +1,45 @@
+/* CONTENEDOR PRINCIPAL */
 .layout-container {
-  display: block;
+  display: flex; /* Antes era block → necesario para sticky footer */
+  flex-direction: column; /* Estructura vertical */
   position: relative;
-  flex-direction: column;
   width: 100%;
   max-width: 2000px;
-  min-height: 100vh;
+  min-height: 100vh; /* Ocupa toda la pantalla */
   margin: 0 auto;
 
-  background-image: url("../assets/imagenes/fondo.png"); /* usa tu ruta real */
+  background-image: url("../assets/imagenes/fondo.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  outline: 5px solid red;
+  box-sizing: border-box;
 }
 
+/* HEADER */
 .layout-header {
   background-color: transparent;
   padding: 1rem;
   text-align: center;
 }
 
+/* CONTENIDO PRINCIPAL */
 .layout-main {
-  flex: 1;
+  flex: 1; /* Empuja el footer hacia abajo */
   padding: 2rem;
-  padding-inline: clamp(
-    1rem,
-    4vw,
-    3rem
-  ); /* Para evitar texto pegado al borde en panatllas pequeñas */
+  padding-inline: clamp(1rem, 4vw, 3rem);
+  box-sizing: border-box;
 }
 
+/* FOOTER */
 .layout-footer {
+  margin-top: auto; /* Sticky footer */
   background-color: transparent;
   padding: 1rem;
   text-align: center;
 }
 
-/* remplazar padding normal (mas grade) a un mas pequeño para moviles. */
+/* RESPONSIVE PARA MÓVILES */
 @media (max-width: 600px) {
   .layout-main {
     padding: 1.2rem;

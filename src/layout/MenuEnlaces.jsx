@@ -1,20 +1,13 @@
 import "./MenuEnlaces.css";
-import { FaHouseUser } from "react-icons/fa6";
-import { FaFacebookF } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
-import { FaTiktok } from "react-icons/fa";
-import { FaRightFromBracket } from "react-icons/fa6";
+import { FaHouseUser, FaRightFromBracket } from "react-icons/fa6";
+import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa";
 
 function MenuEnlaces() {
   return (
-    // Contenedor principal del menú superior
     <nav className="menu-enlaces">
-      {/* Icono Home */}
       <div className="logo-home">
         <FaHouseUser />
       </div>
-
-      {/* Bloque central con iconos sociales */}
       <div className="iconos-sociales">
         <div className="icono-facebook">
           <FaFacebookF />
@@ -28,8 +21,6 @@ function MenuEnlaces() {
           <FaTiktok />
         </div>
       </div>
-
-      {/* Icono de salir/cerrar sesión */}
       <div className="logo-salir">
         <FaRightFromBracket />
       </div>

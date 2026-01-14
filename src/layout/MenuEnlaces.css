@@ -1,5 +1,5 @@
-/* NAV PRINCIPAL */
 .menu-enlaces {
+  /* Contenedor Principal (NAV) */
   display: flex;
   flex-direction: row;
   justify-content: space-between;

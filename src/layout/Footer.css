@@ -1,0 +1,57 @@
+/* CONTENEDOR FOOTER */
+.layout-footer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  padding: (0.2rem, 3vw, 4rem);
+  gap: clamp(0.2rem, 3vw, 4rem);
+  box-sizing: border-box;
+}
+
+/* NAV CONTENEDOR */
+.nosotros {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(0.5rem, 2vw, 2rem);
+  box-sizing: border-box;
+}
+
+/* LISTA DE ENLACES */
+.lista-nosotros {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+  gap: clamp(0.5rem, 4vw, 3rem); /* gap responsivo */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* CADA ITEM DE LA LISTA */
+.lista-nosotros li {
+  /* opcional, pero da más presencia a cada bloque */
+  padding: clamp(0.2rem, 1vw, 0.6rem);
+}
+
+/* ENLACES (aplica a tus <a id="quienes_somos" ...> etc.) */
+.lista-nosotros a {
+  color: #2589b6;
+  text-decoration: none;
+  font-size: clamp(2rem, 5vw, 3rem); /* tamaño responsivo */
+  transition: 0.3s ease;
+}
+
+/* HOVER ENLACES */
+.lista-nosotros a:hover {
+  color: #b6ed0d;
+  font-weight: bold;
+  transform: scale(1.1);
+}

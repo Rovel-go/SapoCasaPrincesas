@@ -1,0 +1,31 @@
+/* CONTENEDOR NAV BASE */
+.menu-nav {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* LISTA BASE */
+.menu-list {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ITEM BASE */
+.menu-item {
+  padding: 0;
+}
+
+/* ENLACE BASE */
+.menu-link {
+  text-decoration: none;
+  transition: 0.3s ease;
+}
