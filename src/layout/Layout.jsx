@@ -14,13 +14,11 @@ function Layout() {
       <Header />
 
       <main className="layout-main">
-        <Outlet />
-
         <NavegadorPaginas />
 
-        {/*<div style={{ height: "500px", background: "rgba(255,0,0,0.2)" }}>
-          Contenido de prueba
-        </div>*/}
+        <div className="outlet-wrapper">
+          <Outlet />
+        </div>
       </main>
 
       <Footer />

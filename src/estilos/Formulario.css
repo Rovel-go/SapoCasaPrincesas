@@ -1,0 +1,238 @@
+/*   CONTENEDORES PRINCIPALES*/
+
+#conitem1,
+#conitem2 {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  padding-top: 2rem;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+/* ================================
+   TÍTULOS
+================================ */
+.titulo-login,
+.titulo-cuenta {
+  text-align: center;
+  color: #b6ed0d;
+  font-size: clamp(2rem, 10vw + 2rem, 3rem);
+  margin: 0;
+}
+
+/* ================================
+   FORMULARIOS (Login, Registro, CambiarContraseña)
+================================ */
+.formulario-login,
+.formulario-registro {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* ================================
+   BLOQUE AZUL INSTITUCIONAL
+   (Registro y CambiarContraseña)
+================================ */
+.datos-personales {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* ================================
+   BLOQUE AZUL PARA LOGIN
+   (estructura distinta → se adapta)
+================================ */
+.bloque-login {
+  width: 80%;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Login agrupa inputs dentro de .usuario-contraseña */
+.usuario-contraseña {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ================================
+   INPUTS (unificados)
+================================ */
+input,
+.usuario,
+.contraseña {
+  width: 100%;
+  padding: clamp(0.5rem, 2vw, 0.8rem);
+  background-color: #2589b6;
+  border: none;
+  border-radius: 12px;
+  color: #000;
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  text-align: center;
+}
+
+input::placeholder {
+  color: #000;
+  opacity: 0.8;
+}
+
+input:hover {
+  background-color: #2b9acb;
+  transition: background-color 0.25s ease;
+}
+
+input:focus {
+  outline: 3px solid #6bed0d;
+  box-shadow: 0 0 8px rgba(107, 237, 13, 0.6);
+}
+
+/* ================================
+   BOTÓN LOGIN (se respeta tal cual)
+================================ */
+#inicio_sesion {
+  background-color: #6bed0d;
+  border-radius: clamp(0.6rem, 2vw, 1rem);
+  padding: clamp(0.6rem, 2vw, 1rem);
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 80%;
+}
+
+.iniciar-sesion {
+  background: transparent;
+  border: none;
+  color: #cf47b3;
+  font-family: pacifico;
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  cursor: pointer;
+}
+
+#inicio_sesion:hover {
+  background-color: #cf47b3;
+  transform: scale(1.05);
+}
+
+.iniciar-sesion:hover {
+  color: #b6ed0d;
+  transform: scale(1.1);
+}
+
+/* ================================
+   SECCIÓN INGRESAR (Registro y CambiarContraseña)
+================================ */
+.ingresar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.leyenda-ingresar {
+  color: #6bed0d;
+  font-size: clamp(2rem, 12vw + 2rem, 2.5rem);
+}
+
+.enviar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+}
+
+.icono-flecha {
+  color: fuchsia;
+  font-size: clamp(2rem, 10vw + 2rem, 3rem);
+  transition: transform 0.3s ease;
+}
+
+.enviar:hover .icono-flecha {
+  transform: scale(1.2);
+}
+
+/* ================================
+   OLVIDÉ CONTRASEÑA (Login)
+================================ */
+.olvide-contraseña {
+  width: 100%;
+  text-align: right;
+  padding-right: clamp(1rem, 5vw, 3rem);
+}
+
+.link-olvide {
+  color: #fff;
+  font-size: clamp(0.7rem, 2vw, 1.3rem);
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.link-olvide:hover {
+  color: #cf47b3;
+  transform: scale(1.1);
+}
+
+/* ================================
+   REGISTRO (Login)
+================================ */
+.Registro .cuenta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+  color: #fff;
+}
+
+.Registro a {
+  color: #b6ed0d;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+  text-decoration: none;
+}
+
+.Registro a:hover {
+  color: #cf47b3;
+  transform: scale(1.1);
+}
+
+/* ================================
+   MENSAJES DE ERROR / ÉXITO
+================================ */
+.error,
+.login-error {
+  color: #ff4d4d;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+  text-align: center;
+  margin: 0;
+}
+
+.exito {
+  color: #6bed0d;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+  text-align: center;
+}
+
+/* Desactivar menú, navegador y logo SOLO en CambiarContraseña */
+#conitem2 .menu-navegacion,
+#conitem2 .navegador-paginas,
+#conitem2 .menu-enlaces .logo-home {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: default;
+}

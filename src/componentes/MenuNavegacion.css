@@ -2,6 +2,7 @@
 .menu-nav {
   display: flex;
   flex-wrap: wrap;
+
   width: 100%;
   justify-content: center;
   align-items: center;
@@ -28,4 +29,11 @@
 .menu-link {
   text-decoration: none;
   transition: 0.3s ease;
+}
+
+.nav-disabled {
+  pointer-events: none;
+  opacity: 0.4;
+  filter: grayscale(1);
+  cursor: default;
 }

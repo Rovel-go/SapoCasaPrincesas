@@ -44,7 +44,7 @@
 .link-pagina {
   color: #2589b6;
   text-decoration: none;
-  font-size: clamp(2rem, 5vw, 3rem); /* tamaño responsivo */
+  font-size: clamp(1rem, 5vw, 2rem); /* tamaño responsivo */
   transition: 0.3s ease;
 }
 
@@ -53,4 +53,11 @@
   color: #b6ed0d;
   font-weight: bold;
   transform: scale(1.1);
+}
+
+.nav-disabled {
+  pointer-events: none;
+  opacity: 0.4;
+  filter: grayscale(1);
+  cursor: default;
 }

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./MenuNavegacion.css";
 
 export default function MenuNavegacion({
@@ -8,8 +8,18 @@ export default function MenuNavegacion({
   classNameItem = "",
   classNameLink = "",
 }) {
+  const location = useLocation();
+
+  const isLogin = location.pathname === "/login";
+  const isRegistro = location.pathname === "/registro";
+  const isCambiar = location.pathname === "/CambiarContrasena";
+
+  const disabled = isLogin || isRegistro || isCambiar;
+
   return (
-    <nav className={`${classNameNav} menu-nav`}>
+    <nav
+      className={`${classNameNav} menu-nav ${disabled ? "nav-disabled" : ""}`}
+    >
       <ul className={`${classNameList} menu-list`}>
         {items.map((item) => (
           <li key={item.to} className={`${classNameItem} menu-item`}>

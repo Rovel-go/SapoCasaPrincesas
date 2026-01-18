@@ -1,18 +1,17 @@
 /* CONTENEDOR PRINCIPAL */
 .layout-container {
-  display: flex; /* Antes era block → necesario para sticky footer */
-  flex-direction: column; /* Estructura vertical */
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 100%;
-  max-width: 2000px;
-  min-height: 100vh; /* Ocupa toda la pantalla */
+  min-height: 100dvh;
   margin: 0 auto;
-
   background-image: url("../assets/imagenes/fondo.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
+
   box-sizing: border-box;
 }
 
@@ -25,23 +24,42 @@
 
 /* CONTENIDO PRINCIPAL */
 .layout-main {
-  flex: 1; /* Empuja el footer hacia abajo */
-  padding: 2rem;
+  display: flex; /* Necesario para que Outlet pueda expandirse */
+  flex: 1; /* Permite que el main crezca */
+  flex-direction: column; /* Navegador arriba, Outlet abajo */
+  min-height: 0;
   padding-inline: clamp(1rem, 4vw, 3rem);
+  padding-block: 0; /* Quitamos padding vertical para que la imagen crezca */
   box-sizing: border-box;
+}
+.outlet-wrapper {
+  flex: 1;
+  min-height: 0; /* evita overflow y franja blanca */
+  display: flex;
 }
 
 /* FOOTER */
 .layout-footer {
-  margin-top: auto; /* Sticky footer */
+  margin-top: auto;
   background-color: transparent;
-  padding: 1rem;
+  padding: 2rem;
   text-align: center;
 }
 
-/* RESPONSIVE PARA MÓVILES */
-@media (max-width: 600px) {
-  .layout-main {
-    padding: 1.2rem;
-  }
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
+
+.layout > *:nth-child(2) {
+  flex: 1;
+  display: flex;
+}
+
+/* RESPONSIVE PARA MÓVILES */
+/*@media (max-width: 600px) {
+  .layout-main {
+    padding-inline: 1rem;
+  }
+}*/
