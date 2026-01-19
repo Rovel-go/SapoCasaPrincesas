@@ -10,10 +10,18 @@ export default function MenuNavegacion({
 }) {
   const location = useLocation();
 
+  {
+    /*detecto en que pagina estoy para desactivar menus en esas rutas, 
+  ya que no quiero que el usuario navegue a ninguna pagina sin hacer login */
+  }
+
   const isLogin = location.pathname === "/login";
   const isRegistro = location.pathname === "/registro";
   const isCambiar = location.pathname === "/CambiarContrasena";
 
+  {
+    /* Si estoy en alguna de las paginas arriba descritas, desactivo Menus */
+  }
   const disabled = isLogin || isRegistro || isCambiar;
 
   return (
@@ -23,6 +31,8 @@ export default function MenuNavegacion({
       <ul className={`${classNameList} menu-list`}>
         {items.map((item) => (
           <li key={item.to} className={`${classNameItem} menu-item`}>
+            {/* Cada item del menu es un link hacia la ruta correspondiente */}
+
             <Link to={item.to} className={`${classNameLink} menu-link`}>
               {item.label}
             </Link>

@@ -1,4 +1,6 @@
 .header-principal {
+  /* Contenedor principal del header. Uso flex en columna
+     para acomodar el menú y el branding uno debajo del otro. */
   color: var(--color-text);
   padding: 3rem 0;
   display: flex;
@@ -8,18 +10,20 @@
 }
 
 /* MENU ENLACES */
+/* Barra superior con Home, Salir e iconos sociales */
 .menu-enlaces {
   width: 90%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.6rem 2rem;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.05); /* fondo semitransparente */
   border-radius: 1rem;
   font-size: 1.6rem;
 }
 
 /* HOME y SALIR */
+/* Efecto visual para que parezcan botones clicables */
 .logo-home span,
 .logo-salir span {
   cursor: pointer;
@@ -29,10 +33,11 @@
 .logo-home span:hover,
 .logo-salir span:hover {
   opacity: 0.8;
-  transform: translateY(-2px);
+  transform: translateY(-2px); /* pequeño levantamiento */
 }
 
 /* ICONOS SOCIALES */
+/* Contenedor de los iconos (Facebook, Instagram, etc.) */
 .iconos-sociales {
   display: flex;
   gap: 1.6rem;
@@ -53,6 +58,7 @@
 }
 
 /* BRAND CONTENT */
+/* Contenedor del logo (princesita + texto SAPO + slogan) */
 .brand-content {
   width: 90%;
   display: flex;
@@ -64,14 +70,16 @@
 }
 
 /* PRINCESITA */
+/* Imagen circular del logo */
 .princesita img {
   width: 10rem;
   height: 10rem;
-  border-radius: 50%;
-  object-fit: cover;
+  border-radius: 50%; /* la hace circular */
+  object-fit: cover; /* evita deformación */
 }
 
 /* SAPO + SLOGAN */
+/* Contenedor del texto del branding */
 .brand-assets {
   display: flex;
   flex-direction: column;

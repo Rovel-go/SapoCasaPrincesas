@@ -6,38 +6,38 @@
   text-align: center;
   font-size: 0.95rem;
   font-weight: 500;
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.3s ease-out; /* Animación para que el mensaje aparezca suave */
 }
 
-/* ERROR */
+/* Estilos para cuando el  mensaje es de ERROR */
 .mensaje-error {
   background-color: #ffe5e5;
   color: #b30000;
   border: 1px solid #b30000;
 }
 
-/* ÉXITO */
+/* Estilos para cuando el  mensaje es de ÉXITO */
 .mensaje-exito {
   background-color: #e6ffe6;
   color: #006600;
   border: 1px solid #009900;
 }
 
-/* PROCESO */
+/* Estilos para cuando quiero mostrar que algo esta en PROCESO */
 .mensaje-proceso {
   background-color: #e6f0ff;
   color: #003399;
   border: 1px solid #3366ff;
 }
 
-/* INFO */
+/* Estilos para cuando el  mensaje es de INFORMACION */
 .mensaje-info {
   background-color: #fff7e6;
   color: #b36b00;
   border: 1px solid #ff9900;
 }
 
-/* Animación */
+/* Animación simple para que el mensaje no aparezca de golpe */
 @keyframes fadeIn {
   from {
     opacity: 0;

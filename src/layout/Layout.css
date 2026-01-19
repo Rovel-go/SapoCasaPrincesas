@@ -1,4 +1,6 @@
 /* CONTENEDOR PRINCIPAL */
+/* Este contenedor envuelve toda la aplicación. Uso min-height: 100dvh
+   para asegurar que siempre ocupe toda la pantalla, incluso en móviles. */
 .layout-container {
   display: flex;
   flex-direction: column;
@@ -6,16 +8,19 @@
   width: 100%;
   min-height: 100dvh;
   margin: 0 auto;
+
+  /* Fondo institucional */
   background-image: url("../assets/imagenes/fondo.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed; /* efecto parallax */
 
   box-sizing: border-box;
 }
 
 /* HEADER */
+/* Header simple, solo para separar visualmente del fondo */
 .layout-header {
   background-color: transparent;
   padding: 1rem;
@@ -23,22 +28,26 @@
 }
 
 /* CONTENIDO PRINCIPAL */
+/* Aquí va el navegador y el Outlet. Uso flex para que el Outlet
+   pueda crecer y evitar que el footer suba. */
 .layout-main {
-  display: flex; /* Necesario para que Outlet pueda expandirse */
-  flex: 1; /* Permite que el main crezca */
-  flex-direction: column; /* Navegador arriba, Outlet abajo */
-  min-height: 0;
+  display: flex; /* necesario para que Outlet se expanda */
+  flex: 1; /* ocupa todo el espacio disponible */
+  flex-direction: column; /* navegador arriba, contenido abajo */
+  min-height: 0; /* evita overflow vertical */
   padding-inline: clamp(1rem, 4vw, 3rem);
-  padding-block: 0; /* Quitamos padding vertical para que la imagen crezca */
+  padding-block: 0; /* dejo que el fondo ocupe toda la altura */
   box-sizing: border-box;
 }
+
 .outlet-wrapper {
   flex: 1;
-  min-height: 0; /* evita overflow y franja blanca */
+  min-height: 0; /* evita la franja blanca cuando el contenido es grande */
   display: flex;
 }
 
 /* FOOTER */
+/* Lo empujo al final usando margin-top: auto */
 .layout-footer {
   margin-top: auto;
   background-color: transparent;
@@ -46,20 +55,15 @@
   text-align: center;
 }
 
+/* Estructura general del layout */
 .layout {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
+/* Hago que el segundo hijo (main) crezca automáticamente */
 .layout > *:nth-child(2) {
   flex: 1;
   display: flex;
 }
-
-/* RESPONSIVE PARA MÓVILES */
-/*@media (max-width: 600px) {
-  .layout-main {
-    padding-inline: 1rem;
-  }
-}*/

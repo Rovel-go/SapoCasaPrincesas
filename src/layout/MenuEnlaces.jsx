@@ -7,22 +7,25 @@ function MenuEnlaces() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Detecto si estoy en páginas donde no quiero permitir volver al home.
   const isLogin = location.pathname === "/login";
   const isRegistro = location.pathname === "/registro";
   const isCambiar = location.pathname === "/CambiarContrasena";
 
-  // logo-home deshabilitado en login, registro y cambiar contraseña
+  // Home se deshabilita en login, registro y cambiar contraseña.
   const homeDisabled = isLogin || isRegistro || isCambiar;
 
-  // logo-salir SIEMPRE habilitado
+  // El botón salir siempre está habilitado.
   const salirDisabled = false;
 
+  // Navega al home solo si no está deshabilitado.
   const handleHome = () => {
     if (!homeDisabled) navigate("/home");
   };
 
+  // Salir siempre redirige a login.
   const handleSalir = () => {
-    navigate("/login"); // SIEMPRE redirige a login
+    navigate("/login");
   };
 
   return (

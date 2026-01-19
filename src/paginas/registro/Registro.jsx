@@ -1,77 +1,80 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../../estilos/formulario.css";
 import "./Registro.css";
 import { FaAnglesRight } from "react-icons/fa6";
 import Mensaje from "../../componentes/Mensaje.jsx";
 
 export default function Registro() {
+  const navigate = useNavigate();
+
+  // Estado para mostrar mensajes dinámicos (error o éxito)
   const [mensaje, setMensaje] = useState("");
   const [tipoMensaje, setTipoMensaje] = useState("error");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const form = e.target;
-    const nombre = form.nombre.value.trim();
-    const apellidos = form.apellidos.value.trim();
-    const email = form.email.value.trim();
-    const pass = form.passwordHash.value.trim();
-    const confirm = form.confirmarPassword.value.trim();
+    // Obtengo los valores del formulario
+    const nombre = e.target.nombre.value.trim();
+    const apellidos = e.target.apellidos.value.trim(); // nombre EXACTO del input
+    const email = e.target.email.value.trim();
+    const contrasena = e.target.passwordHash.value.trim(); // nombre EXACTO del input
+    const confirmar = e.target.confirmarPassword.value.trim();
 
-    if (!pass) {
-      setMensaje("La contraseña es obligatoria.");
+    // Validación básica
+    if (!nombre || !apellidos || !email || !contrasena || !confirmar) {
+      setMensaje("Todos los campos son obligatorios.");
       setTipoMensaje("error");
       return;
     }
 
-    if (!/^[0-9]{8}$/.test(pass)) {
-      setMensaje(
-        "La contraseña debe contener exactamente 8 dígitos numéricos."
-      );
-      setTipoMensaje("error");
-      return;
-    }
-
-    if (!confirm) {
-      setMensaje("Debe confirmar la contraseña.");
-      setTipoMensaje("error");
-      return;
-    }
-
-    if (pass !== confirm) {
+    // Validación de coincidencia de contraseñas
+    if (contrasena !== confirmar) {
       setMensaje("Las contraseñas no coinciden.");
       setTipoMensaje("error");
       return;
     }
 
+    // Validación de formato de correo
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      setMensaje("Ingrese un correo electrónico válido.");
+      setTipoMensaje("error");
+      return;
+    }
+
     try {
-      const respuesta = await fetch("http://localhost:8081/registro", {
+      // Envío de datos al backend
+      const respuesta = await fetch("http://localhost:8081/api/registro", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           nombre,
-          apellidos,
+          apellidos, // nombres EXACTOS que el backend espera
           email,
-          passwordHash: pass,
+          contrasena, // coincide con el campo del backend
         }),
       });
 
-      const data = await respuesta.json();
+      const data = await respuesta.text();
 
+      // Si el backend responde con error
       if (!respuesta.ok) {
-        setMensaje(data.mensaje || "Error en el registro.");
+        setMensaje(data);
         setTipoMensaje("error");
         return;
       }
 
-      setMensaje("Registro exitoso. Redirigiendo...");
+      // Registro exitoso
+      setMensaje("Usuario registrado correctamente.");
       setTipoMensaje("exito");
 
+      // Pausa breve para mostrar el mensaje antes de redirigir
       setTimeout(() => {
-        window.location.href = "/login";
+        navigate("/login");
       }, 1000);
     } catch (error) {
+      // Error de conexión
       setMensaje("Error de conexión con el servidor.");
       setTipoMensaje("error");
     }
@@ -79,8 +82,9 @@ export default function Registro() {
 
   return (
     <div id="conitem2">
-      <h1 className="titulo-cuenta">Crea Tu Cuenta</h1>
+      <h1 className="titulo-cuenta">Crear Cuenta</h1>
 
+      {/* Formulario de registro */}
       <form className="formulario-registro" onSubmit={handleSubmit} noValidate>
         <div className="datos-personales">
           <input name="nombre" type="text" placeholder="Nombre" required />
@@ -105,8 +109,10 @@ export default function Registro() {
           />
         </div>
 
+        {/* Mensaje dinámico */}
         {mensaje && <Mensaje tipo={tipoMensaje}>{mensaje}</Mensaje>}
 
+        {/* Botón enviar */}
         <div className="ingresar">
           <h3 className="leyenda-ingresar">Ingresar</h3>
           <button type="submit" className="enviar">

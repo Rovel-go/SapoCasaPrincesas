@@ -1,4 +1,4 @@
-/*   CONTENEDORES PRINCIPALES*/
+/*  CONTENEDORES PRINCIPALES */
 
 #conitem1,
 #conitem2 {
@@ -13,9 +13,7 @@
   box-sizing: border-box;
 }
 
-/* ================================
-   TÍTULOS
-================================ */
+/* TÍTULOS*/
 .titulo-login,
 .titulo-cuenta {
   text-align: center;
@@ -24,9 +22,7 @@
   margin: 0;
 }
 
-/* ================================
-   FORMULARIOS (Login, Registro, CambiarContraseña)
-================================ */
+/* FORMULARIOS (Login, Registro, CambiarContraseña) */
 .formulario-login,
 .formulario-registro {
   display: flex;
@@ -38,10 +34,7 @@
   box-sizing: border-box;
 }
 
-/* ================================
-   BLOQUE AZUL INSTITUCIONAL
-   (Registro y CambiarContraseña)
-================================ */
+/* BLOQUE AZUL INSTITUCIONAL(Registro y CambiarContraseña) */
 .datos-personales {
   width: 80%;
   display: flex;
@@ -50,10 +43,7 @@
   align-items: center;
 }
 
-/* ================================
-   BLOQUE AZUL PARA LOGIN
-   (estructura distinta → se adapta)
-================================ */
+/* BLOQUE AZUL PARA LOGIN (estructura distinta → se adapta)*/
 .bloque-login {
   width: 80%;
   padding: clamp(1rem, 3vw, 1.5rem);
@@ -72,9 +62,7 @@
   gap: 1rem;
 }
 
-/* ================================
-   INPUTS (unificados)
-================================ */
+/* INPUTS (unificados) */
 input,
 .usuario,
 .contraseña {
@@ -103,9 +91,7 @@ input:focus {
   box-shadow: 0 0 8px rgba(107, 237, 13, 0.6);
 }
 
-/* ================================
-   BOTÓN LOGIN (se respeta tal cual)
-================================ */
+/* BOTÓN LOGIN (se respeta tal cual) */
 #inicio_sesion {
   background-color: #6bed0d;
   border-radius: clamp(0.6rem, 2vw, 1rem);
@@ -134,9 +120,7 @@ input:focus {
   transform: scale(1.1);
 }
 
-/* ================================
-   SECCIÓN INGRESAR (Registro y CambiarContraseña)
-================================ */
+/*  SECCIÓN INGRESAR (Registro y CambiarContraseña) */
 .ingresar {
   display: flex;
   gap: 1rem;
@@ -168,9 +152,7 @@ input:focus {
   transform: scale(1.2);
 }
 
-/* ================================
-   OLVIDÉ CONTRASEÑA (Login)
-================================ */
+/* OLVIDÉ CONTRASEÑA (Login) */
 .olvide-contraseña {
   width: 100%;
   text-align: right;
@@ -189,9 +171,7 @@ input:focus {
   transform: scale(1.1);
 }
 
-/* ================================
-   REGISTRO (Login)
-================================ */
+/* REGISTRO (Login) */
 .Registro .cuenta {
   display: flex;
   justify-content: center;
@@ -211,9 +191,7 @@ input:focus {
   transform: scale(1.1);
 }
 
-/* ================================
-   MENSAJES DE ERROR / ÉXITO
-================================ */
+/* MENSAJES DE ERROR / ÉXITO */
 .error,
 .login-error {
   color: #ff4d4d;

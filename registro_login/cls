@@ -1,0 +1,595 @@
+[1mdiff --git a/estructura_proyecto b/estructura_proyecto[m
+[1mdeleted file mode 100644[m
+[1mindex 5c4625b..0000000[m
+[1m--- a/estructura_proyecto[m
+[1m+++ /dev/null[m
+[36m@@ -1,102 +0,0 @@[m
+[31m-Folder PATH listing[m
+[31m-Volume serial number is 5A6C-B4BB[m
+[31m-C:.[m
+[31m-¶   .gitattributes[m
+[31m-¶   .gitignore[m
+[31m-¶   estructura_proyecto[m
+[31m-¶   estructura_proyecto.txt[m
+[31m-¶   HELP.md[m
+[31m-¶   mvnw[m
+[31m-¶   mvnw.cmd[m
+[31m-¶   pom.xml[m
+[31m-¶   registro_login.iml[m
+[31m-¶   [m
+[31m-+---.idea[m
+[31m-¶   ¶   .gitignore[m
+[31m-¶   ¶   compiler.xml[m
+[31m-¶   ¶   encodings.xml[m
+[31m-¶   ¶   jarRepositories.xml[m
+[31m-¶   ¶   misc.xml[m
+[31m-¶   ¶   vcs.xml[m
+[31m-¶   ¶   workspace.xml[m
+[31m-¶   ¶   [m
+[31m-¶   +---libraries[m
+[31m-¶           javax_servlet_api.xml[m
+[31m-¶           [m
+[31m-+---.mvn[m
+[31m-¶   +---wrapper[m
+[31m-¶           maven-wrapper.properties[m
+[31m-¶           [m
+[31m-+---src[m
+[31m-¶   +---main[m
+[31m-¶       +---java[m
+[31m-¶       ¶   +---sapoCasaPrincesas[m
+[31m-¶       ¶       +---registro_login[m
+[31m-¶       ¶           +---servlets[m
+[31m-¶       ¶                   DashboardServlet.java[m
+[31m-¶       ¶                   LoginServlet.java[m
+[31m-¶       ¶                   RegistroServlet.java[m
+[31m-¶       ¶                   [m
+[31m-¶       +---resources[m
+[31m-¶       ¶       application.properties[m
+[31m-¶       ¶       [m
+[31m-¶       +---webapp[m
+[31m-¶           ¶   Dashboard.jsp[m
+[31m-¶           ¶   index.jsp[m
+[31m-¶           ¶   Login.jsp[m
+[31m-¶           ¶   Registro.jsp[m
+[31m-¶           ¶   [m
+[31m-¶           +---WEB-INF[m
+[31m-¶                   web.xml[m
+[31m-¶                   [m
+[31m-+---target[m
+[31m-    ¶   registro_login.war[m
+[31m-    ¶   [m
+[31m-    +---classes[m
+[31m-    ¶   ¶   application.properties[m
+[31m-    ¶   ¶   [m
+[31m-    ¶   +---sapoCasaPrincesas[m
+[31m-    ¶       +---registro_login[m
+[31m-    ¶           +---servlets[m
+[31m-    ¶                   DashboardServlet.class[m
+[31m-    ¶                   LoginServlet.class[m
+[31m-    ¶                   RegistroServlet.class[m
+[31m-    ¶                   [m
+[31m-    +---generated-sources[m
+[31m-    ¶   +---annotations[m
+[31m-    +---maven-archiver[m
+[31m-    ¶       pom.properties[m
+[31m-    ¶       [m
+[31m-    +---maven-status[m
+[31m-    ¶   +---maven-compiler-plugin[m
+[31m-    ¶       +---compile[m
+[31m-    ¶           +---default-compile[m
+[31m-    ¶                   createdFiles.lst[m
+[31m-    ¶                   inputFiles.lst[m
+[31m-    ¶                   [m
+[31m-    +---registro_login[m
+[31m-        ¶   index.jsp[m
+[31m-        ¶   [m
+[31m-        +---META-INF[m
+[31m-        +---WEB-INF[m
+[31m-            ¶   web.xml[m
+[31m-            ¶   [m
+[31m-            +---classes[m
+[31m-            ¶   ¶   application.properties[m
+[31m-            ¶   ¶   [m
+[31m-            ¶   +---sapoCasaPrincesas[m
+[31m-            ¶       +---registro_login[m
+[31m-            ¶           +---servlets[m
+[31m-            ¶                   DashboardServlet.class[m
+[31m-            ¶                   LoginServlet.class[m
+[31m-            ¶                   RegistroServlet.class[m
+[31m-            ¶                   [m
+[31m-            +---jsp[m
+[31m-            ¶       Dashboard.jsp[m
+[31m-            ¶       Login.jsp[m
+[31m-            ¶       Registro.jsp[m
+[31m-            ¶       [m
+[31m-            +---lib[m
+[31m-                    jbcrypt-0.4.jar[m
+[31m-                    jstl-1.2.jar[m
+[31m-                    [m
+[1mdiff --git a/estructura_proyecto.txt b/estructura_proyecto.txt[m
+[1mindex 2e4387f..7d85b4a 100644[m
+[1m--- a/estructura_proyecto.txt[m
+[1m+++ b/estructura_proyecto.txt[m
+[36m@@ -1,101 +1,125 @@[m
+ Folder PATH listing[m
+ Volume serial number is 5A6C-B4BB[m
+ C:.[m
+[31m-¶   .gitattributes[m
+[31m-¶   .gitignore[m
+[31m-¶   estructura_proyecto.txt[m
+[31m-¶   HELP.md[m
+[31m-¶   mvnw[m
+[31m-¶   mvnw.cmd[m
+[31m-¶   pom.xml[m
+[31m-¶   registro_login.iml[m
+[31m-¶   [m
+[32m+[m[32m|   .gitattributes[m
+[32m+[m[32m|   .gitignore[m
+[32m+[m[32m|   estructura_proyecto[m
+[32m+[m[32m|   estructura_proyecto.txt[m
+[32m+[m[32m|   HELP.md[m
+[32m+[m[32m|   mvnw[m
+[32m+[m[32m|   mvnw.cmd[m
+[32m+[m[32m|   pom.xml[m
+[32m+[m[32m|   registro_login.iml[m
+[32m+[m[32m|[m[41m   [m
+ +---.idea[m
+[31m-¶   ¶   .gitignore[m
+[31m-¶   ¶   compiler.xml[m
+[31m-¶   ¶   encodings.xml[m
+[31m-¶   ¶   jarRepositories.xml[m
+[31m-¶   ¶   misc.xml[m
+[31m-¶   ¶   vcs.xml[m
+[31m-¶   ¶   workspace.xml[m
+[31m-¶   ¶   [m
+[31m-¶   +---libraries[m
+[31m-¶           javax_servlet_api.xml[m
+[31m-¶           [m
+[32m+[m[32m|   |   .gitignore[m
+[32m+[m[32m|   |   compiler.xml[m
+[32m+[m[32m|   |   encodings.xml[m
+[32m+[m[32m|   |   jarRepositories.xml[m
+[32m+[m[32m|   |   misc.xml[m
+[32m+[m[32m|   |   vcs.xml[m
+[32m+[m[32m|   |   workspace.xml[m
+[32m+[m[32m|   |[m[41m   [m
+[32m+[m[32m|   \---libraries[m
+[32m+[m[32m|           javax_servlet_api.xml[m
+[32m+[m[32m|[m[41m           [m
+ +---.mvn[m
+[31m-¶   +---wrapper[m
+[31m-¶           maven-wrapper.properties[m
+[31m-¶           [m
+[32m+[m[32m|   \---wrapper[m
+[32m+[m[32m|           maven-wrapper.properties[m
+[32m+[m[32m|[m[41m           [m
+[32m+[m[32m+---.smarttomcat[m
+[32m+[m[32m|   \---registro_login[m
+[32m+[m[32m|       \---conf[m
+[32m+[m[32m|           |   catalina.policy[m
+[32m+[m[32m|           |   catalina.properties[m
+[32m+[m[32m|           |   context.xml[m
+[32m+[m[32m|           |   jaspic-providers.xml[m
+[32m+[m[32m|           |   jaspic-providers.xsd[m
+[32m+[m[32m|           |   logging.properties[m
+[32m+[m[32m|           |   server.xml[m
+[32m+[m[32m|           |   tomcat-users.xml[m
+[32m+[m[32m|           |   tomcat-users.xsd[m
+[32m+[m[32m|           |   web.xml[m
+[32m+[m[32m|           |[m[41m   [m
+[32m+[m[32m|           \---Catalina[m
+[32m+[m[32m|               \---localhost[m
+ +---src[m
+[31m-¶   +---main[m
+[31m-¶       +---java[m
+[31m-¶       ¶   +---sapoCasaPrincesas[m
+[31m-¶       ¶       +---registro_login[m
+[31m-¶       ¶           +---servlets[m
+[31m-¶       ¶                   DashboardServlet.java[m
+[31m-¶       ¶                   LoginServlet.java[m
+[31m-¶       ¶                   RegistroServlet.java[m
+[31m-¶       ¶                   [m
+[31m-¶       +---resources[m
+[31m-¶       ¶       application.properties[m
+[31m-¶       ¶       [m
+[31m-¶       +---webapp[m
+[31m-¶           ¶   Dashboard.jsp[m
+[31m-¶           ¶   index.jsp[m
+[31m-¶           ¶   Login.jsp[m
+[31m-¶           ¶   Registro.jsp[m
+[31m-¶           ¶   [m
+[31m-¶           +---WEB-INF[m
+[31m-¶                   web.xml[m
+[31m-¶                   [m
+[31m-+---target[m
+[31m-    ¶   registro_login.war[m
+[31m-    ¶   [m
+[32m+[m[32m|   \---main[m
+[32m+[m[32m|       +---java[m
+[32m+[m[32m|       |   \---sapoCasaPrincesas[m
+[32m+[m[32m|       |       \---registro_login[m
+[32m+[m[32m|       |           |   RegistroLoginApplication.java[m
+[32m+[m[32m|       |           |[m[41m   [m
+[32m+[m[32m|       |           +---config[m
+[32m+[m[32m|       |           +---controller[m
+[32m+[m[32m|       |           |       DashboardController.java[m
+[32m+[m[32m|       |           |       LoginController.java[m
+[32m+[m[32m|       |           |       UsuarioController.java[m
+[32m+[m[32m|       |           |       VistaController.java[m
+[32m+[m[32m|       |           |[m[41m       [m
+[32m+[m[32m|       |           +---model[m
+[32m+[m[32m|       |           |       Usuario.java[m
+[32m+[m[32m|       |           |[m[41m       [m
+[32m+[m[32m|       |           +---repository[m
+[32m+[m[32m|       |           |       UsuarioRepository.java[m
+[32m+[m[32m|       |           |[m[41m       [m
+[32m+[m[32m|       |           +---security[m
+[32m+[m[32m|       |           |       CustomUserDetailsService.java[m
+[32m+[m[32m|       |           |       SecurityConfig.java[m
+[32m+[m[32m|       |           |[m[41m       [m
+[32m+[m[32m|       |           \---service[m
+[32m+[m[32m|       |                   UsuarioService.java[m
+[32m+[m[32m|       |[m[41m                   [m
+[32m+[m[32m|       +---resources[m
+[32m+[m[32m|       |   |   application.properties[m
+[32m+[m[32m|       |   |[m[41m   [m
+[32m+[m[32m|       |   \---templates[m
+[32m+[m[32m|       |           dashboard.html[m
+[32m+[m[32m|       |           login.html[m
+[32m+[m[32m|       |           registro.html[m
+[32m+[m[32m|       |           VistaLogin.html[m
+[32m+[m[32m|       |[m[41m           [m
+[32m+[m[32m|       \---webapp[m
+[32m+[m[32m|           \---WEB-INF[m
+[32m+[m[32m\---target[m
+     +---classes[m
+[31m-    ¶   ¶   application.properties[m
+[31m-    ¶   ¶   [m
+[31m-    ¶   +---sapoCasaPrincesas[m
+[31m-    ¶       +---registro_login[m
+[31m-    ¶           +---servlets[m
+[31m-    ¶                   DashboardServlet.class[m
+[31m-    ¶                   LoginServlet.class[m
+[31m-    ¶                   RegistroServlet.class[m
+[31m-    ¶                   [m
+[32m+[m[32m    |   |   application.properties[m
+[32m+[m[32m    |   |[m[41m   [m
+[32m+[m[32m    |   +---sapoCasaPrincesas[m
+[32m+[m[32m    |   |   \---registro_login[m
+[32m+[m[32m    |   |       |   RegistroLoginApplication.class[m
+[32m+[m[32m    |   |       |[m[41m   [m
+[32m+[m[32m    |   |       +---controller[m
+[32m+[m[32m    |   |       |       DashboardController.class[m
+[32m+[m[32m    |   |       |       LoginController.class[m
+[32m+[m[32m    |   |       |       UsuarioController.class[m
+[32m+[m[32m    |   |       |       VistaController.class[m
+[32m+[m[32m    |   |       |[m[41m       [m
+[32m+[m[32m    |   |       +---model[m
+[32m+[m[32m    |   |       |       Usuario.class[m
+[32m+[m[32m    |   |       |[m[41m       [m
+[32m+[m[32m    |   |       +---repository[m
+[32m+[m[32m    |   |       |       UsuarioRepository.class[m
+[32m+[m[32m    |   |       |[m[41m       [m
+[32m+[m[32m    |   |       +---security[m
+[32m+[m[32m    |   |       |       CustomUserDetailsService.class[m
+[32m+[m[32m    |   |       |       SecurityConfig.class[m
+[32m+[m[32m    |   |       |[m[41m       [m
+[32m+[m[32m    |   |       \---service[m
+[32m+[m[32m    |   |               UsuarioService.class[m
+[32m+[m[32m    |   |[m[41m               [m
+[32m+[m[32m    |   \---templates[m
+[32m+[m[32m    |           dashboard.html[m
+[32m+[m[32m    |           login.html[m
+[32m+[m[32m    |           registro.html[m
+[32m+[m[32m    |           VistaLogin.html[m
+[32m+[m[32m    |[m[41m           [m
+     +---generated-sources[m
+[31m-    ¶   +---annotations[m
+[31m-    +---maven-archiver[m
+[31m-    ¶       pom.properties[m
+[31m-    ¶       [m
+[31m-    +---maven-status[m
+[31m-    ¶   +---maven-compiler-plugin[m
+[31m-    ¶       +---compile[m
+[31m-    ¶           +---default-compile[m
+[31m-    ¶                   createdFiles.lst[m
+[31m-    ¶                   inputFiles.lst[m
+[31m-    ¶                   [m
+[31m-    +---registro_login[m
+[31m-        ¶   index.jsp[m
+[31m-        ¶   [m
+[31m-        +---META-INF[m
+[31m-        +---WEB-INF[m
+[31m-            ¶   web.xml[m
+[31m-            ¶   [m
+[31m-            +---classes[m
+[31m-            ¶   ¶   application.properties[m
+[31m-            ¶   ¶   [m
+[31m-            ¶   +---sapoCasaPrincesas[m
+[31m-            ¶       +---registro_login[m
+[31m-            ¶           +---servlets[m
+[31m-            ¶                   DashboardServlet.class[m
+[31m-            ¶                   LoginServlet.class[m
+[31m-            ¶                   RegistroServlet.class[m
+[31m-            ¶                   [m
+[31m-            +---jsp[m
+[31m-            ¶       Dashboard.jsp[m
+[31m-            ¶       Login.jsp[m
+[31m-            ¶       Registro.jsp[m
+[31m-            ¶       [m
+[31m-            +---lib[m
+[31m-                    jbcrypt-0.4.jar[m
+[31m-                    jstl-1.2.jar[m
+[31m-                    [m
+[32m+[m[32m    |   \---annotations[m
+[32m+[m[32m    \---maven-status[m
+[32m+[m[32m        \---maven-compiler-plugin[m
+[32m+[m[32m            \---compile[m
+[32m+[m[32m                \---default-compile[m
+[32m+[m[32m                        createdFiles.lst[m
+[32m+[m[32m                        inputFiles.lst[m
+[32m+[m[41m                        [m
+[1mdiff --git a/src/main/java/sapoCasaPrincesas/registro_login/controller/LoginController.java b/src/main/java/sapoCasaPrincesas/registro_login/controller/LoginController.java[m
+[1mindex 0e40435..d4147d1 100644[m
+[1m--- a/src/main/java/sapoCasaPrincesas/registro_login/controller/LoginController.java[m
+[1m+++ b/src/main/java/sapoCasaPrincesas/registro_login/controller/LoginController.java[m
+[36m@@ -2,15 +2,43 @@[m [mpackage sapoCasaPrincesas.registro_login.controller;[m
+ [m
+ import org.springframework.stereotype.Controller;[m
+ import org.springframework.web.bind.annotation.GetMapping;[m
+[32m+[m[32mimport org.springframework.web.bind.annotation.PostMapping;[m
+[32m+[m[32mimport org.springframework.web.bind.annotation.RequestParam;[m
+[32m+[m
+[32m+[m[32mimport sapoCasaPrincesas.registro_login.repository.UsuarioRepository;[m
+ [m
+ @Controller[m
+ public class LoginController {[m
+ [m
+[32m+[m[32m    private final UsuarioRepository usuarioRepository;[m
+[32m+[m
+[32m+[m[32m    public LoginController(UsuarioRepository usuarioRepository) {[m
+[32m+[m[32m        this.usuarioRepository = usuarioRepository;[m
+[32m+[m[32m    }[m
+[32m+[m
+     @GetMapping("/login")[m
+     public String mostrarLogin() {[m
+         return "login"; // login.html[m
+     }[m
+[32m+[m
+[32m+[m[32m    @PostMapping("/login-check")[m
+[32m+[m[32m    public String verificarLogin(@RequestParam String username,[m
+[32m+[m[32m                                 @RequestParam String password) {[m
+[32m+[m
+[32m+[m[32m        // 1. Verificar si el email existe[m
+[32m+[m[32m        if (!usuarioRepository.existsByEmail(username)) {[m
+[32m+[m[32m            return "redirect:/login?error=email-no-existe";[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        // 2. Si existe, dejar que Spring Security valide la contrase√±a[m
+[32m+[m[32m        return "redirect:/login";[m
+[32m+[m[32m    }[m
+ }[m
+ [m
+ [m
+ [m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[1mdiff --git a/src/main/java/sapoCasaPrincesas/registro_login/controller/UsuarioController.java b/src/main/java/sapoCasaPrincesas/registro_login/controller/UsuarioController.java[m
+[1mindex e649f9b..798708f 100644[m
+[1m--- a/src/main/java/sapoCasaPrincesas/registro_login/controller/UsuarioController.java[m
+[1m+++ b/src/main/java/sapoCasaPrincesas/registro_login/controller/UsuarioController.java[m
+[36m@@ -3,9 +3,11 @@[m [mpackage sapoCasaPrincesas.registro_login.controller;[m
+ import org.springframework.stereotype.Controller;[m
+ import org.springframework.web.bind.annotation.PostMapping;[m
+ import org.springframework.web.bind.annotation.RequestParam;[m
+[31m-import org.springframework.web.servlet.view.RedirectView;[m
+[32m+[m
+ import sapoCasaPrincesas.registro_login.service.UsuarioService;[m
+ [m
+[32m+[m
+[32m+[m
+ @Controller[m
+ public class UsuarioController {[m
+ [m
+[36m@@ -16,18 +18,22 @@[m [mpublic class UsuarioController {[m
+     }[m
+ [m
+     @PostMapping("/registrar")[m
+[31m-    public RedirectView registrar(@RequestParam("nombre") String nombre,[m
+[31m-                                  @RequestParam("apellidos") String apellidos,[m
+[31m-                                  @RequestParam("email") String email,[m
+[31m-                                  @RequestParam("password") String password) {[m
+[32m+[m[32m    public String registrarUsuario(@RequestParam String nombre,[m
+[32m+[m[32m                                   @RequestParam String apellidos,[m
+[32m+[m[32m                                   @RequestParam String email,[m
+[32m+[m[32m                                   @RequestParam String password) {[m
+[32m+[m
+         try {[m
+             usuarioService.registrar(nombre, apellidos, email, password);[m
+[31m-            return new RedirectView("/login?registro=true");[m
+[32m+[m[32m            return "redirect:/login?registro=exito";[m
+[32m+[m
+         } catch (IllegalArgumentException e) {[m
+[31m-            return new RedirectView("/registro?error=" + e.getMessage());[m
+[32m+[m
+[32m+[m[32m            // e.getMessage() contiene:[m
+[32m+[m[32m            // "campos-vacios", "contrase√±a-corta", "email-existe"[m
+[32m+[m[32m            return "redirect:/registro?error=" + e.getMessage();[m
+         }[m
+     }[m
+[31m-[m
+ }[m
+ [m
+ [m
+[36m@@ -35,4 +41,18 @@[m [mpublic class UsuarioController {[m
+ [m
+ [m
+ [m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+ [m
+[1mdiff --git a/src/main/resources/templates/login.html b/src/main/resources/templates/login.html[m
+[1mindex de8b9df..8a494a8 100644[m
+[1m--- a/src/main/resources/templates/login.html[m
+[1m+++ b/src/main/resources/templates/login.html[m
+[36m@@ -3,33 +3,46 @@[m
+ <head>[m
+     <meta charset="UTF-8">[m
+     <title>Login</title>[m
+[32m+[m
+[32m+[m[32m    <style>[m
+[32m+[m[32m        .error-msg { color: red; font-size: 0.9em; }[m
+[32m+[m[32m        .ok-msg { color: green; font-size: 0.9em; }[m
+[32m+[m[32m        label { font-weight: bold; }[m
+[32m+[m[32m    </style>[m
+ </head>[m
+ <body>[m
+ [m
+ <h2>Iniciar sesi√≥n</h2>[m
+ [m
+[31m-<div th:if="${param.error}">[m
+[31m-    <p style="color:red;">Credenciales incorrectas</p>[m
+[32m+[m[32m<div th:if="${param.registro == 'exito'}" class="ok-msg">[m
+[32m+[m[32m    Registro exitoso. Ahora puede iniciar sesi√≥n.[m
+ </div>[m
+ [m
+[31m-<div th:if="${param.logout}">[m
+[31m-    <p style="color:green;">Sesi√≥n cerrada correctamente</p>[m
+[32m+[m[32m<div th:if="${param.error}" class="error-msg">[m
+[32m+[m[32m    Credenciales incorrectas.[m
+ </div>[m
+ [m
+ <form th:action="@{/login}" method="post">[m
+[31m-    <label>Email:</label>[m
+[31m-    <input type="text" name="username" required>[m
+ [m
+[32m+[m[32m    <label>Email:</label><br>[m
+[32m+[m[32m    <input type="email" name="username" required>[m
+     <br/>[m
+ [m
+[31m-    <label>Contrase√±a:</label>[m
+[32m+[m[32m    <label>Contrase√±a:</label><br>[m
+     <input type="password" name="password" required>[m
+[31m-[m
+     <br/>[m
+ [m
+[31m-    <button type="submit">Iniciar Sesion</button>[m
+[32m+[m[32m    <button type="submit">Ingresar</button>[m
+ </form>[m
+ [m
+[32m+[m[32m<p>[m
+[32m+[m[32m    <a th:href="@{/registro}">Crear una cuenta</a>[m
+[32m+[m[32m</p>[m
+[32m+[m
+ </body>[m
+ </html>[m
+ [m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[1mdiff --git a/src/main/resources/templates/registro.html b/src/main/resources/templates/registro.html[m
+[1mindex f8c7000..8b7a2f3 100644[m
+[1m--- a/src/main/resources/templates/registro.html[m
+[1m+++ b/src/main/resources/templates/registro.html[m
+[36m@@ -3,35 +3,78 @@[m
+ <head>[m
+     <meta charset="UTF-8">[m
+     <title>Registro</title>[m
+[32m+[m
+[32m+[m[32m    <style>[m
+[32m+[m[32m        .error-msg {[m
+[32m+[m[32m            color: red;[m
+[32m+[m[32m            font-size: 0.9em;[m
+[32m+[m[32m            margin-bottom: 10px;[m
+[32m+[m[32m        }[m
+[32m+[m[32m        .ok-msg {[m
+[32m+[m[32m            color: green;[m
+[32m+[m[32m            font-size: 0.9em;[m
+[32m+[m[32m            margin-bottom: 10px;[m
+[32m+[m[32m        }[m
+[32m+[m[32m        label { font-weight: bold; }[m
+[32m+[m[32m        input { margin-bottom: 5px; }[m
+[32m+[m[32m    </style>[m
+ </head>[m
+ <body>[m
+ [m
+ <h2>Registro de usuario</h2>[m
+ [m
+[32m+[m
+[32m+[m
+[32m+[m[32m<!-- MENSAJES DE ERROR DESDE EL CONTROLADOR -->[m
+[32m+[m[32m<div th:switch="${#strings.trim(param.error)}">[m
+[32m+[m[32m    <div th:case="'campos-vacios'" class="error-msg">[m
+[32m+[m[32m        Debe completar todos los campos.[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div th:case="'contrase√±a-corta'" class="error-msg">[m
+[32m+[m[32m        La contrase√±a debe tener al menos 6 caracteres.[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div th:case="'email-existe'" class="error-msg">[m
+[32m+[m[32m        El correo electr√≥nico ya est√° registrado.[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m</div>[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+ <form th:action="@{/registrar}" method="post">[m
+ [m
+[31m-    <label>Nombre:</label>[m
+[32m+[m[32m    <label>Nombre:</label><br>[m
+     <input type="text" name="nombre" required>[m
+     <br/>[m
+ [m
+[31m-    <label>Apellidos:</label>[m
+[32m+[m[32m    <label>Apellidos:</label><br>[m
+     <input type="text" name="apellidos" required>[m
+     <br/>[m
+ [m
+[31m-    <label>Email:</label>[m
+[32m+[m[32m    <label>Email:</label><br>[m
+     <input type="email" name="email" required>[m
+     <br/>[m
+ [m
+[31m-    <label>Contrase√±a:</label>[m
+[31m-    <input type="password" name="password" required>[m
+[32m+[m[32m    <label>Contrase√±a:</label><br>[m
+[32m+[m[32m    <input type="password" name="password" required minlength="6">[m
+     <br/>[m
+ [m
+     <button type="submit">Registrarse</button>[m
+ </form>[m
+ [m
+[31m-[m
+[31m-[m
+ <p>[m
+     <a th:href="@{/login}">Volver al login</a>[m
+ </p>[m
+ [m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m</body>[m
+[32m+[m[32m</html>[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m
+[41m+[m

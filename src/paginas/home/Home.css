@@ -1,13 +1,18 @@
 .home-container {
+  /* Contenedor principal de la pantalla Home.
+     Uso var(--vh) para corregir el problema de altura real en móviles
+     (evita el salto cuando aparece la barra del navegador). */
   display: flex;
   width: 100%;
   height: calc(var(--vh) * 100); /* altura real del dispositivo */
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: hidden; /* evita barras si la imagen se expande */
 }
 
 .home-imagen {
+  /* Imagen de fondo o portada.
+     object-fit: cover asegura que siempre llene el espacio sin deformarse. */
   width: 100%;
   height: 100%;
   object-fit: cover;

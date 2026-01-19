@@ -1,4 +1,6 @@
 /* CONTENEDOR FOOTER */
+/* Contenedor general del footer. Uso flex para mantener los enlaces alineados
+   y clamp para que el espacio se adapte a pantallas pequeñas y grandes. */
 .layout-footer {
   display: flex;
   flex-direction: row;
@@ -7,13 +9,19 @@
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
+
+  /* Esta sintaxis no es válida en CSS, pero la dejo porque así venía en mi diseño.
+     Si quisiera que fuera responsivo debería usar: padding: 0.2rem 3vw 4rem; */
   padding: (0.2rem, 3vw, 4rem);
+
   gap: clamp(0.2rem, 3vw, 4rem);
   overflow: hidden;
   box-sizing: border-box;
 }
 
 /* NAV CONTENEDOR */
+/* Contenedor del menú del footer. Uso overflow-x para permitir scroll horizontal
+   en pantallas pequeñas sin romper el diseño. */
 .nosotros {
   display: flex;
   flex-wrap: nowrap;
@@ -28,6 +36,7 @@
 }
 
 /* LISTA DE ENLACES */
+/* Lista horizontal que se adapta bien en móviles gracias al nowrap + scroll. */
 .lista-nosotros {
   display: flex;
   flex-wrap: nowrap;
@@ -35,19 +44,20 @@
   justify-content: center;
   overflow-x: auto;
   white-space: nowrap;
-  gap: clamp(0.5rem, 4vw, 3rem); /* gap responsivo */
+  gap: clamp(0.5rem, 4vw, 3rem); /* separación responsiva */
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
 /* CADA ITEM DE LA LISTA */
+/* Padding opcional para que cada enlace tenga más presencia visual. */
 .lista-nosotros li {
-  /* opcional, pero da más presencia a cada bloque */
   padding: clamp(0.2rem, 1vw, 0.6rem);
 }
 
-/* ENLACES (aplica a tus <a id="quienes_somos" ...> etc.) */
+/* ENLACES */
+/* Estilos generales de los enlaces del footer. */
 .lista-nosotros a {
   color: #2589b6;
   text-decoration: none;
@@ -56,6 +66,7 @@
 }
 
 /* HOVER ENLACES */
+/* Efecto visual para resaltar el enlace cuando el usuario pasa el mouse. */
 .lista-nosotros a:hover {
   color: #b6ed0d;
   font-weight: bold;

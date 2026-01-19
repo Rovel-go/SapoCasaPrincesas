@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../../estilos/formulario.css";
 import "./Login.css";
-import Mensaje from "../../componentes/Mensaje";
+import { FaAnglesRight } from "react-icons/fa6";
+import Mensaje from "../../componentes/Mensaje.jsx";
 
 export default function Login() {
+  const navigate = useNavigate();
+
+  // Estado para mostrar mensajes dinámicos (error o éxito)
   const [mensaje, setMensaje] = useState("");
   const [tipoMensaje, setTipoMensaje] = useState("error");
 
@@ -12,103 +16,104 @@ export default function Login() {
     e.preventDefault();
 
     const email = e.target.email.value.trim();
-    const password = e.target.passwordHash.value.trim();
+    const contrasena = e.target.contrasena.value.trim();
 
-    if (!email || !password) {
-      setMensaje("Por favor, completa este campo.");
+    setMensaje(""); // limpio mensaje previo
+
+    // Validación básica
+    if (!email || !contrasena) {
+      setMensaje("Debe ingresar correo y contraseña.");
       setTipoMensaje("error");
       return;
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setMensaje("Ingrese un formato válido: email@mail.com");
+    // Validación de formato de correo
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      setMensaje("Ingrese un correo electrónico válido.");
       setTipoMensaje("error");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:8081/login", {
+      // Envío de credenciales al backend
+      const respuesta = await fetch("http://localhost:8081/api/login", {
         method: "POST",
-        body: new FormData(e.target),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, contrasena }),
       });
 
-      if (!res.ok) {
-        if (res.status === 404) {
-          setMensaje(
-            "Este usuario no está asociado a ninguna cuenta. ¡Regístrate!"
-          );
-        } else if (res.status === 401) {
-          setMensaje("Contraseña incorrecta. ¿Intentamos de nuevo?");
-        } else {
-          setMensaje("Ups! Algo salió mal. Inténtalo más tarde, por favor.");
-        }
+      const data = await respuesta.text();
+
+      // Si el backend responde con error
+      if (!respuesta.ok) {
+        setMensaje(data || "Credenciales inválidas.");
         setTipoMensaje("error");
         return;
       }
 
-      window.location.href = "/home";
+      // Guardar sesión simple en el navegador
+      sessionStorage.setItem("logged", "true");
+
+      setMensaje("Inicio de sesión exitoso.");
+      setTipoMensaje("exito");
+
+      // Pequeña pausa para mostrar el mensaje antes de navegar
+      setTimeout(() => {
+        navigate("/home");
+      }, 800);
     } catch (error) {
-      setMensaje("Ups! Algo salió mal. Intenta más tarde, por favor.");
+      // Error de conexión
+      setMensaje("Error de conexión con el servidor.");
       setTipoMensaje("error");
     }
   };
 
   return (
-    <div id="conitem1">
-      <h1 className="titulo-login">Login</h1>
+    <div id="conitem2">
+      <h1 className="titulo-cuenta">Iniciar Sesión</h1>
 
-      <form
-        id="loginForm"
-        className="formulario-login"
-        onSubmit={handleSubmit}
-        noValidate
-      >
-        <div className="bloque-login">
-          <div className="usuario-contraseña">
-            <input
-              className="usuario"
-              id="email"
-              name="email"
-              type="text"
-              placeholder="usuario (email)"
-              required
-            />
-
-            <input
-              className="contraseña"
-              id="passwordHash"
-              name="passwordHash"
-              type="password"
-              placeholder="Contraseña"
-              required
-            />
-          </div>
-
-          <div className="olvide-contraseña">
-            <Link to="/CambiarContrasena" className="link-olvide">
-              Olvidé mi contraseña
-            </Link>
-          </div>
+      {/* Formulario de login */}
+      <form className="formulario-registro" onSubmit={handleSubmit} noValidate>
+        <div className="datos-personales">
+          <input
+            name="email"
+            type="text"
+            placeholder="Correo electrónico"
+            required
+          />
+          <input
+            name="contrasena"
+            type="password"
+            placeholder="Contraseña"
+            required
+          />
         </div>
 
+        {/* Enlace para recuperar contraseña */}
+        <div className="olvide-contraseña">
+          <Link to="/CambiarContrasena" className="link-olvide">
+            Olvidé mi contraseña
+          </Link>
+        </div>
+
+        {/* Mensaje dinámico */}
         {mensaje && <Mensaje tipo={tipoMensaje}>{mensaje}</Mensaje>}
 
-        <div id="inicio_sesion">
-          <button type="submit" className="iniciar-sesion">
-            Iniciar Sesión
+        {/* Botón de enviar */}
+        <div className="ingresar">
+          <h3 className="leyenda-ingresar">Iniciar Sesión</h3>
+
+          <button type="submit" className="enviar">
+            <FaAnglesRight className="icono-flecha" />
           </button>
         </div>
-      </form>
 
-      <div className="Registro">
-        <p className="cuenta">
-          No tengo cuenta,
-          <Link id="link" to="/registro">
-            {" "}
-            ¡Quiero Registrarme!
-          </Link>
-        </p>
-      </div>
+        {/* Enlace a registro */}
+        <div className="Registro">
+          <p className="cuenta">No tengo cuenta </p>
+          <Link to="/registro">Quiero Registrarme!</Link>
+        </div>
+      </form>
     </div>
   );
 }
