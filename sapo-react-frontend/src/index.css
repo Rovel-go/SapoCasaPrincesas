@@ -1,0 +1,26 @@
+html,
+body,
+#root {
+  /* Reseteo básico para que toda la app use el 100% del espacio disponible */
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh; /* asegura que la app siempre cubra la pantalla */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url("/src/assets/imagenes/fondo.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: sans-serif;
+}
+
+main {
+  /* Permite que el contenido principal crezca y empuje el footer hacia abajo */
+  flex: 1;
+  display: flex;
+}
