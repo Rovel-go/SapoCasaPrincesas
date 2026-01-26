@@ -27,8 +27,8 @@ public class UsuarioController {
     }
 
     // obtiene usuario por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtenerPorId(@PathVariable Long id) {
+   @GetMapping("/{id}")
+    public ResponseEntit y<Usuario> obtenerPorId(@PathVariable Long id) {
         Usuario usuario = usuarioService.obtenerPorId(id);
 
         if (usuario != null) {
