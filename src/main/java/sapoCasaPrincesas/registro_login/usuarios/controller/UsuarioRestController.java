@@ -3,8 +3,10 @@ package sapoCasaPrincesas.registro_login.usuarios.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sapoCasaPrincesas.registro_login.usuarios.model.Usuario;
+import sapoCasaPrincesas.registro_login.usuarios.dto.UsuarioLoginDTO;
+import sapoCasaPrincesas.registro_login.usuarios.dto.UsuarioRegistroDTO;
 import sapoCasaPrincesas.registro_login.usuarios.service.UsuarioService;
+import sapoCasaPrincesas.registro_login.usuarios.dto.UsuarioDTO;
 
 @RestController
 @RequestMapping("/api")
@@ -17,91 +19,71 @@ public class UsuarioRestController {
         this.usuarioService = usuarioService;
     }
 
-    // Registro de usuario nuevo en BD sapo
+    // Expongo este endpoint para registrar usuarios desde el frontend,
+    // devolviendo mensajes JSON simples para facilitar el consumo.
     @PostMapping("/registro")
-    public ResponseEntity<?> registrarUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> registrarUsuario(@RequestBody UsuarioRegistroDTO dto) {
 
-        // Validaciones de campos obligatorios
-        if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El nombre es obligatorio");
+        String error = usuarioService.registrar(dto);
+
+        if (error != null) {
+            return ResponseEntity.badRequest()
+                    .body("{\"mensaje\": \"" + error + "\"}");
         }
 
-        if (usuario.getApellidos() == null || usuario.getApellidos().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Los apellidos son obligatorios");
-        }
-
-        if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El email es obligatorio");
-        }
-
-        // Validación de formato de email
-        if (!usuario.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            return ResponseEntity.badRequest().body("El formato del email es inválido");
-        }
-
-        if (usuario.getContrasena() == null || usuario.getContrasena().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("La contraseña es obligatoria");
-        }
-
-        // Validación de email duplicado
-        if (usuarioService.emailExiste(usuario.getEmail())) {
-            return ResponseEntity.badRequest().body("El email ya está registrado");
-        }
-
-        // Crear usuario
-        boolean creado = usuarioService.crear(usuario);
-
-        return creado
-                ? ResponseEntity.ok("Usuario registrado correctamente")
-                : ResponseEntity.badRequest().body("Error al crear usuario");
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("{\"mensaje\": \"Usuario registrado correctamente\"}");
     }
 
-    // Login de usuario registrado
+    // Manejo el login devolviendo mensajes específicos para que el frontend
+    // pueda mostrar exactamente qué falló.
     @PostMapping("/login")
-    public ResponseEntity<?> loginUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> loginUsuario(@RequestBody UsuarioLoginDTO dto) {
 
-        // Validaciones de campos obligatorios
-        if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El email es obligatorio");
+        String error = usuarioService.validarLoginConMensaje(dto);
+
+        if (error != null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("{\"mensaje\": \"" + error + "\"}");
         }
 
-        // Validación de formato de email
-        if (!usuario.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            return ResponseEntity.badRequest().body("El formato del email es inválido");
-        }
+        UsuarioDTO usuario = usuarioService.obtenerPorEmail(dto.email());
 
-        if (usuario.getContrasena() == null || usuario.getContrasena().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("La contraseña es obligatoria");
-        }
-
-        boolean valido = usuarioService.validarLogin(
-                usuario.getEmail(),
-                usuario.getContrasena()
-        );
-
-        return valido
-                ? ResponseEntity.ok("Login exitoso")
-                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
+        return ResponseEntity.ok(usuario);
     }
 
-    // Recuperar contraseña
+    // Expongo este endpoint para recuperar contraseña generando una temporal.
+    // Decidí devolver la contraseña temporal directamente porque esta evidencia
+    // no requiere integración con correo electrónico.
     @PostMapping("/recuperar")
-    public ResponseEntity<?> recuperarContrasena(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> recuperarContrasena(@RequestBody UsuarioLoginDTO dto) {
 
-        // Validación de email obligatorio
-        if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El email es obligatorio");
+        // Valido que el email venga presente.
+        if (dto.email() == null || dto.email().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body("{\"mensaje\": \"El email es obligatorio\"}");
         }
 
-        // Validación de formato de email
-        if (!usuario.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            return ResponseEntity.badRequest().body("El formato del email es inválido");
+        // Valido el formato del email antes de llamar al servicio.
+        if (!dto.email().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            return ResponseEntity.badRequest()
+                    .body("{\"mensaje\": \"El formato del email es inválido\"}");
         }
 
-        boolean recuperado = usuarioService.recuperarContrasena(usuario.getEmail());
+        // Llamo al servicio para generar la contraseña temporal.
+        String nuevaTemporal = usuarioService.recuperarContrasena(dto.email());
 
-        return recuperado
-                ? ResponseEntity.ok("Se ha enviado una nueva contraseña a su correo")
-                : ResponseEntity.badRequest().body("No existe un usuario con ese email");
+        // Si el servicio devuelve null, significa que el email no existe.
+        if (nuevaTemporal == null) {
+            return ResponseEntity.badRequest()
+                    .body("{\"mensaje\": \"No existe un usuario con ese email\"}");
+        }
+
+        // Devuelvo la contraseña temporal para que el usuario pueda iniciar sesión.
+        return ResponseEntity.ok(
+                "{ \"mensaje\": \"Se ha generado una nueva contraseña temporal\", " +
+                        "\"contrasenaTemporal\": \"" + nuevaTemporal + "\" }"
+        );
     }
+
 }

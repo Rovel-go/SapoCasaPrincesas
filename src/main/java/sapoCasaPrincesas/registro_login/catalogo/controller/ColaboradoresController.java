@@ -3,9 +3,11 @@ package sapoCasaPrincesas.registro_login.catalogo.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sapoCasaPrincesas.registro_login.catalogo.dto.ColaboradorDTO;
 import sapoCasaPrincesas.registro_login.catalogo.model.Colaborador;
+import sapoCasaPrincesas.registro_login.catalogo.service.ColaboradorService;
+import sapoCasaPrincesas.registro_login.catalogo.service.mapper.ColaboradorMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -13,158 +15,107 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 public class ColaboradoresController {
 
-    private final List<Colaborador> colaboradores = new ArrayList<>(List.of(
-            new Colaborador(1, "Mike", "Estilista", "Color y peinados", "5 años de experiencia", "https://ruta/valentina.png"),
-            new Colaborador(2, "Salome", "Estilista", "Cortes y trenzas", "3 años de experiencia", "https://ruta/camila.png"),
-            new Colaborador(3, "Rey", "Estilista", "Peinados creativos", "4 años de experiencia", "https://ruta/isabela.png")
-    ));
+    private final ColaboradorService service;
 
+    public ColaboradoresController(ColaboradorService service) {
+        this.service = service;
+    }
 
-    // LISTAR TODOS LOS COLABORADORES
-
+    // Uso este endpoint para listar todos los colaboradores visibles en el catálogo.
     @GetMapping
-    public ResponseEntity<List<Colaborador>> obtenerTodos() {
-        return ResponseEntity.ok(colaboradores);
-    }
-
-
-    // OBTENER UN COLABORADOR POR ID
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerPorId(@PathVariable int id) {
-        return colaboradores.stream()
-                .filter(c -> c.getId() == id)
-                .findFirst()
-                .<ResponseEntity<?>>map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Colaborador inexistente"));
-    }
-
-
-    // BUSCAR UN COLABORADOR POR NOMBRE
-
-    @GetMapping("/buscar/{nombre}")
-    public ResponseEntity<List<Colaborador>> buscarPorNombre(@PathVariable String nombre) {
-        List<Colaborador> encontrados = colaboradores.stream()
-                .filter(c -> c.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+    public ResponseEntity<List<ColaboradorDTO>> obtenerTodos() {
+        List<ColaboradorDTO> lista = service.obtenerTodos()
+                .stream()
+                .map(ColaboradorMapper::toDTO)
                 .toList();
 
-        return ResponseEntity.ok(encontrados);
+        return ResponseEntity.ok(lista);
     }
 
+    // Devuelvo 404 si el colaborador no existe para mantener respuestas claras al frontend.
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerPorId(@PathVariable Long id) {
+        Colaborador col = service.obtenerPorId(id);
 
-    // CREAR  UN COLABORADOR
+        if (col == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"mensaje\": \"Colaborador inexistente\"}");
+        }
 
+        return ResponseEntity.ok(ColaboradorMapper.toDTO(col));
+    }
+
+    // Permito búsqueda parcial por nombre para facilitar filtros dinámicos en el cliente.
+    @GetMapping("/buscar/{nombre}")
+    public ResponseEntity<?> buscarPorNombre(@PathVariable String nombre) {
+
+        List<ColaboradorDTO> lista = service.buscarPorNombre(nombre)
+                .stream()
+                .map(ColaboradorMapper::toDTO)
+                .toList();
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"mensaje\": \"Colaborador inexistente\"}");
+        }
+
+        return ResponseEntity.ok(lista);
+    }
+
+    // Creo un colaborador a partir del DTO para evitar exponer la entidad directamente.
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody Colaborador nuevo) {
+    public ResponseEntity<?> crear(@RequestBody ColaboradorDTO dto) {
 
-        // Validaciones
-        if (nuevo.getNombre() == null || nuevo.getNombre().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El nombre es obligatorio");
-        }
+        Colaborador nuevo = new Colaborador(
+                null,
+                dto.nombre(),
+                dto.rol(),
+                dto.especialidad(),
+                dto.experiencia(),
+                dto.foto()
+        );
 
-        if (nuevo.getRol() == null || nuevo.getRol().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El rol es obligatorio");
-        }
-
-        if (nuevo.getEspecialidad() == null || nuevo.getEspecialidad().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("La especialidad es obligatoria");
-        }
-
-        if (nuevo.getExperiencia() == null || nuevo.getExperiencia().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("La experiencia es obligatoria");
-        }
-
-        if (nuevo.getFoto() == null || nuevo.getFoto().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("La URL de la foto es obligatoria");
-        }
-
-        // Generar ID automático
-        int nuevoId = colaboradores.stream()
-                .mapToInt(Colaborador::getId)
-                .max()
-                .orElse(0) + 1;
-
-        nuevo.setId(nuevoId);
-        colaboradores.add(nuevo);
+        Colaborador guardado = service.crear(nuevo);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Colaborador creado correctamente");
+                .body(ColaboradorMapper.toDTO(guardado));
     }
 
-
-    // ACTUALIZAR COLABORADOR (ACTUALIZAR INFORMACION PARCIAL)
-
+    // Actualizo solo los campos enviados en el DTO para permitir modificaciones parciales.
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody Colaborador datos) {
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody ColaboradorDTO dto) {
 
-        Colaborador existente = colaboradores.stream()
-                .filter(c -> c.getId() == id)
-                .findFirst()
-                .orElse(null);
+        Colaborador datos = new Colaborador(
+                null,
+                dto.nombre(),
+                dto.rol(),
+                dto.especialidad(),
+                dto.experiencia(),
+                dto.foto()
+        );
 
-        if (existente == null) {
+        Colaborador actualizado = service.actualizar(id, datos);
+
+        if (actualizado == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Colaborador inexistente");
+                    .body("{\"mensaje\": \"Colaborador inexistente\"}");
         }
 
-        // Validaciones y actualizaciones parciales
-        if (datos.getNombre() != null) {
-            if (datos.getNombre().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("El nombre no puede estar vacío");
-            }
-            existente.setNombre(datos.getNombre());
-        }
-
-        if (datos.getRol() != null) {
-            if (datos.getRol().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("El rol no puede estar vacío");
-            }
-            existente.setRol(datos.getRol());
-        }
-
-        if (datos.getEspecialidad() != null) {
-            if (datos.getEspecialidad().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("La especialidad no puede estar vacía");
-            }
-            existente.setEspecialidad(datos.getEspecialidad());
-        }
-
-        if (datos.getExperiencia() != null) {
-            if (datos.getExperiencia().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("La experiencia no puede estar vacía");
-            }
-            existente.setExperiencia(datos.getExperiencia());
-        }
-
-        if (datos.getFoto() != null) {
-            if (datos.getFoto().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("La URL de la foto no puede estar vacía");
-            }
-            existente.setFoto(datos.getFoto());
-        }
-
-        return ResponseEntity.ok("Colaborador actualizado correctamente");
+        return ResponseEntity.ok(ColaboradorMapper.toDTO(actualizado));
     }
 
-
-    // ELIMINAR UN COLABORADOR
-
+    // Devuelvo un mensaje claro para que el frontend pueda mostrar confirmación al usuario.
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable int id) {
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
 
-        Colaborador existente = colaboradores.stream()
-                .filter(c -> c.getId() == id)
-                .findFirst()
-                .orElse(null);
+        boolean eliminado = service.eliminar(id);
 
-        if (existente == null) {
+        if (!eliminado) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Colaborador inexistente");
+                    .body("{\"mensaje\": \"Colaborador inexistente\"}");
         }
 
-        colaboradores.remove(existente);
-
-        return ResponseEntity.ok("Colaborador eliminado correctamente");
+        return ResponseEntity.ok("{\"mensaje\": \"Colaborador eliminado correctamente\"}");
     }
 }
+

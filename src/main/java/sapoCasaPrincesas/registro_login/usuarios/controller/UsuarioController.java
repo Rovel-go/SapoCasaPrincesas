@@ -3,11 +3,10 @@ package sapoCasaPrincesas.registro_login.usuarios.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sapoCasaPrincesas.registro_login.usuarios.model.Usuario;
+import sapoCasaPrincesas.registro_login.usuarios.dto.*;
 import sapoCasaPrincesas.registro_login.usuarios.service.UsuarioService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -20,237 +19,118 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    // lista todos los usuarios en BD sapo
+    // Expongo este endpoint para obtener todos los usuarios sin revelar información sensible.
     @GetMapping
-    public ResponseEntity<List<Usuario>> obtenerTodos() {
+    public ResponseEntity<List<UsuarioDTO>> obtenerTodos() {
         return ResponseEntity.ok(usuarioService.obtenerTodos());
     }
 
-    // obtiene usuario por ID
-   @GetMapping("/{id}")
-    public ResponseEntit y<Usuario> obtenerPorId(@PathVariable Long id) {
-        Usuario usuario = usuarioService.obtenerPorId(id);
+    // Uso este método para consultar un usuario específico y devolverlo como DTO.
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioDTO> obtenerPorId(@PathVariable Long id) {
+        UsuarioDTO usuario = usuarioService.obtenerPorId(id);
 
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        return ResponseEntity.ok(usuario);
     }
 
-    // registro: nuevos usuarios en BD sapo
+    // Manejo el registro devolviendo mensajes claros según la validación del servicio.
     @PostMapping
-    public ResponseEntity<String> crear(@RequestBody Usuario usuario) {
+    public ResponseEntity<String> registrar(@RequestBody UsuarioRegistroDTO dto) {
 
-        // Validaciones de campos obligatorios
-        if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El nombre es obligatorio");
+        // El servicio devuelve:
+        // - String con mensaje de error
+        // - null si todo está OK
+        String error = usuarioService.registrar(dto);
+
+        if (error != null) {
+            return ResponseEntity.badRequest().body(error);
         }
 
-        if (usuario.getApellidos() == null || usuario.getApellidos().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Los apellidos son obligatorios");
-        }
-
-        if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El email es obligatorio");
-        }
-
-        // Validación de formato de email
-        if (!usuario.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            return ResponseEntity.badRequest().body("El formato del email es inválido");
-        }
-
-        if (usuario.getContrasena() == null || usuario.getContrasena().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("La contraseña es obligatoria");
-        }
-
-        // Validación de email duplicado
-        if (usuarioService.emailExiste(usuario.getEmail())) {
-            return ResponseEntity.badRequest().body("El email ya está registrado");
-        }
-
-        boolean resultado = usuarioService.crear(usuario);
-
-        if (resultado) {
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Usuario creado correctamente");
-        }
-
-        return ResponseEntity.badRequest().body("Error al crear usuario");
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Usuario registrado correctamente");
     }
 
-    // actualizar usuario por ID (actualización parcial)
+    // Permito actualizar datos del usuario sin exponer la contraseña.
     @PutMapping("/{id}")
     public ResponseEntity<String> actualizar(
             @PathVariable Long id,
-            @RequestBody Usuario datosNuevos) {
+            @RequestBody UsuarioDTO dto) {
 
-        Usuario usuarioActual = usuarioService.obtenerPorId(id);
-
-        if (usuarioActual == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Usuario no encontrado");
-        }
-
-        // Validación de email si viene en la actualización
-        if (datosNuevos.getEmail() != null) {
-
-            if (datosNuevos.getEmail().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("El email no puede estar vacío");
-            }
-
-            if (!datosNuevos.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-                return ResponseEntity.badRequest().body("El formato del email es inválido");
-            }
-
-            // Evitar duplicados si cambia el email
-            if (!datosNuevos.getEmail().equals(usuarioActual.getEmail())
-                    && usuarioService.emailExiste(datosNuevos.getEmail())) {
-                return ResponseEntity.badRequest().body("El email ya está registrado");
-            }
-
-            usuarioActual.setEmail(datosNuevos.getEmail());
-        }
-
-        // Actualizar solo los campos enviados
-        if (datosNuevos.getNombre() != null) {
-            usuarioActual.setNombre(datosNuevos.getNombre());
-        }
-
-        if (datosNuevos.getApellidos() != null) {
-            usuarioActual.setApellidos(datosNuevos.getApellidos());
-        }
-
-        if (datosNuevos.getContrasena() != null) {
-            usuarioActual.setContrasena(datosNuevos.getContrasena());
-        }
-
-        boolean actualizado = usuarioService.actualizar(id, usuarioActual);
-
-        if (actualizado) {
-            return ResponseEntity.ok("Usuario actualizado correctamente");
-        }
-
-        return ResponseEntity.badRequest().body("Error al actualizar usuario");
-    }
-
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Usuario> obtenerPorEmail(@PathVariable String email) {
-        Usuario usuario = usuarioService.obtenerPorEmail(email);
-
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<List<Usuario>> obtenerPorNombre(@PathVariable String nombre) {
-        List<Usuario> usuarios = usuarioService.obtenerTodos()
-                .stream()
-                .filter(u -> u.getNombre() != null &&
-                        u.getNombre().toLowerCase().contains(nombre.toLowerCase()))
-                .toList();
-
-        return ResponseEntity.ok(usuarios);
-    }
-
-    @GetMapping("/apellidos/{apellidos}")
-    public ResponseEntity<List<Usuario>> obtenerPorApellidos(@PathVariable String apellidos) {
-
-        String filtro = apellidos.trim().toLowerCase();
-
-        List<Usuario> usuarios = usuarioService.obtenerTodos()
-                .stream()
-                .filter(u -> u.getApellidos() != null &&
-                        u.getApellidos().trim().toLowerCase().contains(filtro))
-                .toList();
-
-        return ResponseEntity.ok(usuarios);
-    }
-
-    // login: Ingreso a sistema de usuarios registrados en BD sapo
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Usuario usuario) {
-
-        // Validaciones
-        if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El email es obligatorio");
-        }
-
-        if (!usuario.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        // Valido el email aquí para evitar pasar datos inválidos al servicio.
+        if (dto.email() != null && !dto.email().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"))
             return ResponseEntity.badRequest().body("El formato del email es inválido");
+
+        boolean actualizado = usuarioService.actualizar(id, dto);
+
+        if (!actualizado) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Datos inválidos o usuario no encontrado");
         }
 
-        if (usuario.getContrasena() == null || usuario.getContrasena().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("La contraseña es obligatoria");
-        }
+        return ResponseEntity.ok("Usuario actualizado correctamente");
+    }
 
-        boolean valido = usuarioService.validarLogin(usuario.getEmail(), usuario.getContrasena());
+    // Manejo el login devolviendo el DTO del usuario si las credenciales son correctas.
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UsuarioLoginDTO dto) {
+
+        boolean valido = usuarioService.validarLogin(dto);
 
         if (!valido) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Credenciales incorrectas");
         }
 
-        return ResponseEntity.ok("Login exitoso");
+        UsuarioDTO usuario = usuarioService.obtenerPorEmail(dto.email());
+
+        return ResponseEntity.ok(usuario);
     }
 
-    // cambiar contraseña (usuario olvido contraseña)
+    // Expongo este endpoint para permitir que el usuario cambie su contraseña.
     @PostMapping("/cambiar-contrasena")
-    public ResponseEntity<String> cambiarContrasena(@RequestBody Map<String, String> body) {
+    public ResponseEntity<String> cambiarContrasena(
+            @RequestBody UsuarioCambioContrasenaDTO dto) {
 
-        String email = body.get("email");
-        String actual = body.get("actual");
-        String nueva = body.get("nueva");
-
-        // Validaciones
-        if (email == null || email.trim().isEmpty()) {
+        // Realizo validaciones básicas antes de llamar al servicio.
+        if (dto.email() == null || dto.email().isBlank())
             return ResponseEntity.badRequest().body("El email es obligatorio");
-        }
 
-        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        if (!dto.email().contains("@"))
             return ResponseEntity.badRequest().body("El formato del email es inválido");
-        }
 
-        if (actual == null || actual.trim().isEmpty()) {
+        if (dto.actual() == null || dto.actual().isBlank())
             return ResponseEntity.badRequest().body("La contraseña actual es obligatoria");
-        }
 
-        if (nueva == null || nueva.trim().isEmpty()) {
+        if (dto.nueva() == null || dto.nueva().isBlank())
             return ResponseEntity.badRequest().body("La nueva contraseña es obligatoria");
+
+        boolean cambiado = usuarioService.cambiarContrasena(dto);
+
+        if (!cambiado) {
+            return ResponseEntity.badRequest()
+                    .body("Datos incorrectos o contraseña actual inválida");
         }
 
-        Usuario usuario = usuarioService.obtenerPorEmail(email);
-        if (usuario == null) {
-            return ResponseEntity.badRequest().body("El correo no está registrado");
-        }
-
-        boolean actualizado = usuarioService.cambiarContrasena(usuario, actual, nueva);
-
-        if (!actualizado) {
-            return ResponseEntity.badRequest().body("La contraseña actual es incorrecta");
-        }
-
-        return ResponseEntity.ok("La contraseña ha sido actualizada correctamente");
+        return ResponseEntity.ok("Contraseña actualizada correctamente");
     }
+
+    // Permito eliminar usuarios devolviendo mensajes claros según el resultado.
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable Long id) {
 
-        Usuario usuario = usuarioService.obtenerPorId(id);
+        boolean eliminado = usuarioService.eliminar(id);
 
-        if (usuario == null) {
+        if (!eliminado) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Usuario no encontrado");
         }
 
-        boolean eliminado = usuarioService.eliminar(id);
-
-        if (eliminado) {
-            return ResponseEntity.ok("Usuario eliminado correctamente");
-        }
-
-        return ResponseEntity.badRequest().body("Error al eliminar usuario");
+        return ResponseEntity.ok("Usuario eliminado correctamente");
     }
-
 }
+
+

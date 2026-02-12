@@ -1,31 +1,35 @@
 package sapoCasaPrincesas.registro_login.catalogo.model;
 
-// Clase que representa a un colaborador dentro del catálogo del sistema
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "colaboradores")
 public class Colaborador {
 
-    // Identificador único del colaborador (lo usa el CRUD)
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    // Nombre real del colaborador
+    // Mantengo este campo simple porque solo necesito el nombre público del colaborador.
     private String nombre;
 
-    // Rol que desempeña dentro del proyecto (Peluqeuro, Colorista, Peinador, etc.)
+    // Uso este campo para identificar el rol dentro del salón (ej: estilista, maquilladora).
     private String rol;
 
-    // Especialidad principal del colaborador
+    // Guardo la especialidad para mostrarla en el catálogo sin necesidad de cálculos adicionales.
     private String especialidad;
 
-    // Años de experiencia que tiene el coloaborador
+    // Este campo me permite describir la experiencia del colaborador de forma libre.
     private String experiencia;
 
-    // URL o ruta de la foto del colaborador
+    // Decidí almacenar la URL de la foto en lugar del archivo para simplificar la evidencia.
     private String foto;
 
-    // Constructor vacío requerido por Spring y por el mapeo JSON
+    // Constructor vacío requerido por JPA.
     public Colaborador() {}
 
-    // Constructor completo para crear objetos manualmente si se necesita
-    public Colaborador(int id, String nombre, String rol, String especialidad, String experiencia, String foto) {
+    // Constructor completo para facilitar la creación manual desde el servicio o pruebas.
+    public Colaborador(Long id, String nombre, String rol, String especialidad, String experiencia, String foto) {
         this.id = id;
         this.nombre = nombre;
         this.rol = rol;
@@ -34,12 +38,11 @@ public class Colaborador {
         this.foto = foto;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    // Setter necesario para actualizar el ID cuando se autogenera en el CRUD
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,7 +50,6 @@ public class Colaborador {
         return nombre;
     }
 
-    // Permite modificar el nombre del colaborador
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -56,7 +58,6 @@ public class Colaborador {
         return rol;
     }
 
-    // Actualiza el rol asignado al colaborador
     public void setRol(String rol) {
         this.rol = rol;
     }
@@ -65,7 +66,6 @@ public class Colaborador {
         return especialidad;
     }
 
-    // Define la especialidad principal del colaborador
     public void setEspecialidad(String especialidad) {
         this.especialidad = especialidad;
     }
@@ -74,7 +74,6 @@ public class Colaborador {
         return experiencia;
     }
 
-    // Guarda la experiencia o trayectoria del colaborador
     public void setExperiencia(String experiencia) {
         this.experiencia = experiencia;
     }
@@ -83,8 +82,8 @@ public class Colaborador {
         return foto;
     }
 
-    // Asigna la foto o imagen asociada al colaborador
     public void setFoto(String foto) {
         this.foto = foto;
     }
 }
+

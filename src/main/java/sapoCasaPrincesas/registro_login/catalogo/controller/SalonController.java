@@ -3,9 +3,11 @@ package sapoCasaPrincesas.registro_login.catalogo.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sapoCasaPrincesas.registro_login.catalogo.dto.SalonDTO;
 import sapoCasaPrincesas.registro_login.catalogo.model.Salon;
+import sapoCasaPrincesas.registro_login.catalogo.service.SalonService;
+import sapoCasaPrincesas.registro_login.catalogo.service.mapper.SalonMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -13,147 +15,107 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 public class SalonController {
 
-    private final List<Salon> salones = new ArrayList<>(List.of(
-            new Salon(1, "Salón Princesa Rosa", "Decoración rosa pastel con temática de coronas", "Piso 1", "https://ruta/salon1.png"),
-            new Salon(2, "Salón Encantado", "Ambiente mágico con luces y estrellas", "Piso 2", "https://ruta/salon2.png"),
-            new Salon(3, "Salón Real", "Estilo elegante con tonos dorados", "Piso 1", "https://ruta/salon3.png")
-    ));
+    private final SalonService service;
 
-    // ============================
-    // LISTAR TODOS
-    // ============================
+    public SalonController(SalonService service) {
+        this.service = service;
+    }
+
+    // Uso este endpoint para listar todos los salones visibles en el catálogo.
     @GetMapping
-    public ResponseEntity<List<Salon>> obtenerTodos() {
-        return ResponseEntity.ok(salones);
-    }
-
-    // ============================
-    // OBTENER POR ID
-    // ============================
-    @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerPorId(@PathVariable int id) {
-        return salones.stream()
-                .filter(s -> s.getId() == id)
-                .findFirst()
-                .<ResponseEntity<?>>map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Salón inexistente"));
-    }
-
-
-    // BUSCAR SALON POR NOMBRE
-
-    @GetMapping("/buscar/{nombre}")
-    public ResponseEntity<List<Salon>> buscarPorNombre(@PathVariable String nombre) {
-        List<Salon> encontrados = salones.stream()
-                .filter(s -> s.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+    public ResponseEntity<List<SalonDTO>> obtenerTodos() {
+        List<SalonDTO> lista = service.obtenerTodos()
+                .stream()
+                .map(SalonMapper::toDTO)
                 .toList();
 
-        return ResponseEntity.ok(encontrados);
+        return ResponseEntity.ok(lista);
     }
 
+    // Devuelvo 404 si el salón no existe para mantener respuestas claras al frontend.
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerPorId(@PathVariable Long id) {
+        Salon salon = service.obtenerPorId(id);
 
-    // CREAR NUEVO SALÓN
+        if (salon == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"mensaje\": \"Salón inexistente\"}");
+        }
 
+        return ResponseEntity.ok(SalonMapper.toDTO(salon));
+    }
+
+    // Permito búsqueda parcial por nombre para facilitar filtros dinámicos en el cliente.
+    @GetMapping("/buscar/{nombre}")
+    public ResponseEntity<?> buscarPorNombre(@PathVariable String nombre) {
+
+        List<SalonDTO> lista = service.buscarPorNombre(nombre)
+                .stream()
+                .map(SalonMapper::toDTO)
+                .toList();
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"mensaje\": \"Salón inexistente\"}");
+        }
+
+        return ResponseEntity.ok(lista);
+    }
+
+    // Creo un salón a partir del DTO para evitar exponer la entidad directamente.
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody Salon nuevo) {
+    public ResponseEntity<?> crear(@RequestBody SalonDTO dto) {
 
-        // Validaciones
-        if (nuevo.getNombre() == null || nuevo.getNombre().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El nombre es obligatorio");
-        }
+        Salon nuevo = new Salon(
+                null,
+                dto.nombre(),
+                dto.descripcion(),
+                dto.ubicacion(),
+                dto.direccion(),
+                dto.foto()
+        );
 
-        if (nuevo.getDescripcion() == null || nuevo.getDescripcion().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("La descripción es obligatoria");
-        }
-
-        if (nuevo.getUbicacion() == null || nuevo.getUbicacion().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("La ubicación es obligatoria");
-        }
-
-        if (nuevo.getFoto() == null || nuevo.getFoto().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("La URL de la foto es obligatoria");
-        }
-
-        // Generar ID automático
-        int nuevoId = salones.stream()
-                .mapToInt(Salon::getId)
-                .max()
-                .orElse(0) + 1;
-
-        nuevo.setId(nuevoId);
-        salones.add(nuevo);
+        Salon guardado = service.crear(nuevo);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Salón creado correctamente");
+                .body(SalonMapper.toDTO(guardado));
     }
 
-
-    // ACTUALIZAR SALÓN (ACTUALIZAR INFORMACION PARCIAL)
-
+    // Actualizo solo los campos enviados en el DTO para permitir modificaciones parciales.
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody Salon datos) {
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody SalonDTO dto) {
 
-        Salon existente = salones.stream()
-                .filter(s -> s.getId() == id)
-                .findFirst()
-                .orElse(null);
+        Salon datos = new Salon(
+                null,
+                dto.nombre(),
+                dto.descripcion(),
+                dto.ubicacion(),
+                dto.direccion(),
+                dto.foto()
+        );
 
-        if (existente == null) {
+        Salon actualizado = service.actualizar(id, datos);
+
+        if (actualizado == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Salón inexistente");
+                    .body("{\"mensaje\": \"Salón inexistente\"}");
         }
 
-        // Validaciones y actualizaciones parciales
-        if (datos.getNombre() != null) {
-            if (datos.getNombre().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("El nombre no puede estar vacío");
-            }
-            existente.setNombre(datos.getNombre());
-        }
-
-        if (datos.getDescripcion() != null) {
-            if (datos.getDescripcion().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("La descripción no puede estar vacía");
-            }
-            existente.setDescripcion(datos.getDescripcion());
-        }
-
-        if (datos.getUbicacion() != null) {
-            if (datos.getUbicacion().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("La ubicación no puede estar vacía");
-            }
-            existente.setUbicacion(datos.getUbicacion());
-        }
-
-        if (datos.getFoto() != null) {
-            if (datos.getFoto().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("La URL de la foto no puede estar vacía");
-            }
-            existente.setFoto(datos.getFoto());
-        }
-
-        return ResponseEntity.ok("Salón actualizado correctamente");
+        return ResponseEntity.ok(SalonMapper.toDTO(actualizado));
     }
 
-
-    // ELIMINAR SALÓN
-
+    // Devuelvo un mensaje claro para que el frontend pueda mostrar confirmación al usuario.
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable int id) {
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
 
-        Salon existente = salones.stream()
-                .filter(s -> s.getId() == id)
-                .findFirst()
-                .orElse(null);
+        boolean eliminado = service.eliminar(id);
 
-        if (existente == null) {
+        if (!eliminado) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Salón inexistente");
+                    .body("{\"mensaje\": \"Salón inexistente\"}");
         }
 
-        salones.remove(existente);
-
-        return ResponseEntity.ok("Salón eliminado correctamente");
+        return ResponseEntity.ok("{\"mensaje\": \"Salón eliminado correctamente\"}");
     }
 }
+

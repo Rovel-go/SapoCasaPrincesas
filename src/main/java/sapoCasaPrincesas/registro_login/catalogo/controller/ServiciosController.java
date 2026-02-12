@@ -1,13 +1,23 @@
 package sapoCasaPrincesas.registro_login.catalogo.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+
+import sapoCasaPrincesas.registro_login.catalogo.dto.CategoriaServicioDTO;
+import sapoCasaPrincesas.registro_login.catalogo.dto.SubServicioDTO;
+
 import sapoCasaPrincesas.registro_login.catalogo.model.CategoriaServicio;
 import sapoCasaPrincesas.registro_login.catalogo.model.SubServicio;
 
-import java.util.ArrayList;
+import sapoCasaPrincesas.registro_login.catalogo.service.CategoriaServicioService;
+import sapoCasaPrincesas.registro_login.catalogo.service.SubServicioService;
+
+import sapoCasaPrincesas.registro_login.catalogo.service.mapper.CategoriaServicioMapper;
+import sapoCasaPrincesas.registro_login.catalogo.service.mapper.SubServicioMapper;
+
+import sapoCasaPrincesas.registro_login.usuarios.dao.UsuarioRepository;
+import sapoCasaPrincesas.registro_login.usuarios.model.Usuario;
+
 import java.util.List;
 
 @RestController
@@ -15,216 +25,266 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 public class ServiciosController {
 
-    private final List<CategoriaServicio> categorias = new ArrayList<>(List.of(
-            new CategoriaServicio("Color", new ArrayList<>(List.of(
-                    new SubServicio(1, "Tinte completo", 45000),
-                    new SubServicio(2, "High-Lights", 60000),
-                    new SubServicio(3, "Iluminación", 55000)
-            ))),
-            new CategoriaServicio("Corte", new ArrayList<>(List.of(
-                    new SubServicio(4, "Corte básico", 20000),
-                    new SubServicio(5, "Corte en capas", 30000),
-                    new SubServicio(6, "Flequillo", 15000)
-            ))),
-            new CategoriaServicio("Peinado", new ArrayList<>(List.of(
-                    new SubServicio(7, "Trenzas", 25000),
-                    new SubServicio(8, "Ondas", 30000),
-                    new SubServicio(9, "Moño princesa", 35000)
-            )))
-    ));
+    private final CategoriaServicioService categoriaService;
+    private final SubServicioService subServicioService;
+    private final UsuarioRepository usuarioRepository;
 
+    public ServiciosController(CategoriaServicioService categoriaService,
+                               SubServicioService subServicioService,
+                               UsuarioRepository usuarioRepository) {
+        this.categoriaService = categoriaService;
+        this.subServicioService = subServicioService;
+        this.usuarioRepository = usuarioRepository;
+    }
 
-    // LISTAR CATEGORÍAS
+    // Uso este método para validar si el usuario tiene rol ADMIN
+    // antes de permitir operaciones de creación, actualización o eliminación.
+    private boolean esAdmin(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        return usuario != null && "ADMIN".equals(usuario.getRol());
+    }
 
+    // ============================
+    // GET — CLIENTE Y ADMIN
+    // ============================
+
+    // Devuelvo todas las categorías para construir el catálogo en el frontend.
     @GetMapping
-    public ResponseEntity<List<CategoriaServicio>> obtenerCategorias() {
-        return ResponseEntity.ok(categorias);
-    }
-
-
-    // OBTENER CATEGORÍA POR NOMBRE
-
-    @GetMapping("/{categoria}")
-    public ResponseEntity<?> obtenerCategoria(@PathVariable String categoria) {
-        return categorias.stream()
-                .filter(c -> c.getCategoria().equalsIgnoreCase(categoria))
-                .findFirst()
-                .<ResponseEntity<?>>map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Categoría inexistente"));
-    }
-
-
-    // OBTENER SUBSERVICIO POR ID
-
-    @GetMapping("/subservicio/{id}")
-    public ResponseEntity<?> obtenerSubServicioPorId(@PathVariable int id) {
-        return categorias.stream()
-                .flatMap(c -> c.getSubservicios().stream())
-                .filter(s -> s.getId() == id)
-                .findFirst()
-                .<ResponseEntity<?>>map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Subservicio inexistente"));
-    }
-
-
-    // BUSCAR SUBSERVICIO POR NOMBRE
-
-    @GetMapping("/buscar/{nombre}")
-    public ResponseEntity<List<SubServicio>> buscarPorNombre(@PathVariable String nombre) {
-        List<SubServicio> encontrados = categorias.stream()
-                .flatMap(c -> c.getSubservicios().stream())
-                .filter(s -> s.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+    public ResponseEntity<List<CategoriaServicioDTO>> obtenerCategorias() {
+        List<CategoriaServicioDTO> lista = categoriaService.obtenerTodas()
+                .stream()
+                .map(CategoriaServicioMapper::toDTO)
                 .toList();
 
-        return ResponseEntity.ok(encontrados);
+        return ResponseEntity.ok(lista);
+    }
+
+    // Permito búsqueda parcial por nombre de categoría.
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<?> obtenerCategoria(@PathVariable String categoria) {
+
+        List<CategoriaServicioDTO> lista = categoriaService
+                .obtenerPorNombre(categoria)
+                .stream()
+                .map(CategoriaServicioMapper::toDTO)
+                .toList();
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"mensaje\": \"Categoría inexistente\"}");
+        }
+
+        return ResponseEntity.ok(lista);
+    }
+    // Devuelvo lista de todos los subservicos de una categoria.
+    {/*//@GetMapping("/subservicios/categoria/{idCategoria}")
+    public ResponseEntity<?> obtenerSubserviciosPorCategoria(@PathVariable Long idCategoria) {
+
+        List<SubServicioDTO> lista = subServicioService
+                .obtenerPorCategoria(idCategoria)
+                .stream()
+                .map(SubServicioMapper::toDTO)
+                .toList();
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"mensaje\": \"No hay subservicios para esta categoría\"}");
+        }
+
+        return ResponseEntity.ok(lista);
+    }*/}
+
+    // Devuelvo todos los subservicios de una categoría por su id.
+// Este endpoint lo uso desde el frontend para desplegar la lista al hacer clic en una categoría.
+    @GetMapping("/subservicios/categoria/{idCategoria}")
+    public ResponseEntity<?> obtenerSubserviciosPorCategoria(@PathVariable Long idCategoria) {
+
+        List<SubServicioDTO> lista = subServicioService
+                .obtenerPorCategoria(idCategoria)
+                .stream()
+                .map(SubServicioMapper::toDTO)
+                .toList();
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"mensaje\": \"No hay subservicios para esta categoría\"}");
+        }
+
+        return ResponseEntity.ok(lista);
     }
 
 
-    // CREAR SUBSERVICIO
 
-    @PostMapping("/subservicio")
-    public ResponseEntity<?> crearSubServicio(@RequestBody SubServicioRequest request) {
-
-        // Validaciones
-        if (request.getCategoria() == null || request.getCategoria().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("La categoría es obligatoria");
-        }
-
-        if (request.getNombre() == null || request.getNombre().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El nombre es obligatorio");
-        }
-
-        if (request.getPrecio() == null) {
-            return ResponseEntity.badRequest().body("El precio es obligatorio");
-        }
-
-        if (request.getPrecio() <= 0) {
-            return ResponseEntity.badRequest().body("El precio debe ser mayor a 0");
-        }
-
-        // Buscar categoría
-        CategoriaServicio cat = categorias.stream()
-                .filter(c -> c.getCategoria().equalsIgnoreCase(request.getCategoria()))
-                .findFirst()
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoría no encontrada")
-                );
-
-        // Generar nuevo ID
-        int nuevoId = categorias.stream()
-                .flatMap(c -> c.getSubservicios().stream())
-                .mapToInt(SubServicio::getId)
-                .max()
-                .orElse(0) + 1;
-
-        // Crear subservicio
-        SubServicio nuevo = new SubServicio(nuevoId, request.getNombre(), request.getPrecio());
-        cat.getSubservicios().add(nuevo);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Subservicio creado correctamente");
-    }
-
-
-
-
-    // ACTUALIZAR SUBSERVICIO
-
-    @PutMapping("/subservicio/{id}")
-    public ResponseEntity<?> actualizarSubServicio(
-            @PathVariable int id,
-            @RequestBody SubServicioRequest request) {
-
-        // Buscar subservicio
-        SubServicio sub = categorias.stream()
-                .flatMap(c -> c.getSubservicios().stream())
-                .filter(s -> s.getId() == id)
-                .findFirst()
-                .orElse(null);
+    // Devuelvo un subservicio por ID o 404 si no existe.
+    @GetMapping("/subservicio/{id}")
+    public ResponseEntity<?> obtenerSubServicioPorId(@PathVariable Long id) {
+        SubServicio sub = subServicioService.obtenerPorId(id);
 
         if (sub == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Subservicio inexistente");
+                    .body("{\"mensaje\": \"Subservicio inexistente\"}");
         }
 
-        // Validación de nombre
-        if (request.getNombre() != null) {
-            if (request.getNombre().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body("El nombre no puede estar vacío");
-            }
-            sub.setNombre(request.getNombre());
-        }
-
-        // Validación de precio
-        if (request.getPrecio() != null) {
-            if (request.getPrecio() <= 0) {
-                return ResponseEntity.badRequest().body("El precio debe ser mayor a 0");
-            }
-            sub.setPrecio(request.getPrecio());
-        }
-
-        return ResponseEntity.ok("Subservicio actualizado correctamente");
+        return ResponseEntity.ok(SubServicioMapper.toDTO(sub));
     }
 
+    // Permito búsqueda parcial por nombre de subservicio.
+    @GetMapping("/buscar/{nombre}")
+    public ResponseEntity<?> buscarPorNombre(@PathVariable String nombre) {
 
+        List<SubServicioDTO> lista = subServicioService.buscarPorNombre(nombre)
+                .stream()
+                .map(SubServicioMapper::toDTO)
+                .toList();
 
-
-    // ELIMINAR SUBSERVICIO
-
-    @DeleteMapping("/subservicio/{id}")
-    public ResponseEntity<?> eliminarSubServicio(@PathVariable int id) {
-
-        boolean existe = categorias.stream()
-                .flatMap(c -> c.getSubservicios().stream())
-                .anyMatch(s -> s.getId() == id);
-
-        if (!existe) {
+        if (lista.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Subservicio inexistente");
+                    .body("{\"mensaje\": \"Subservicio inexistente\"}");
         }
 
-        categorias.forEach(c ->
-                c.getSubservicios().removeIf(s -> s.getId() == id)
-        );
-
-        return ResponseEntity.ok("Subservicio eliminado correctamente");
+        return ResponseEntity.ok(lista);
     }
 
+    // ============================
+    // ADMIN — CRUD CATEGORÍAS
+    // ============================
 
-    // REQUEST DTO
+    // Creo una categoría validando primero que el usuario sea ADMIN.
+    @PostMapping("/categorias")
+    public ResponseEntity<?> crearCategoria(
+            @RequestHeader("email") String email,
+            @RequestBody CategoriaServicioDTO dto) {
 
-    public static class SubServicioRequest {
-
-        private String categoria;
-        private String nombre;
-        private Double precio; // ← ahora permite detectar null
-
-        public String getCategoria() {
-            return categoria;
+        if (!esAdmin(email)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
         }
 
-        public String getNombre() {
-            return nombre;
-        }
+        try {
+            CategoriaServicio nueva = new CategoriaServicio(dto.categoria());
+            CategoriaServicio creada = categoriaService.crear(nueva);
 
-        public Double getPrecio() {
-            return precio;
-        }
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(CategoriaServicioMapper.toDTO(creada));
 
-        public void setCategoria(String categoria) {
-            this.categoria = categoria;
-        }
-
-        public void setNombre(String nombre) {
-            this.nombre = nombre;
-        }
-
-        public void setPrecio(Double precio) {
-            this.precio = precio;
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\"mensaje\": \"Error: categoría duplicada o inválida\"}");
         }
     }
 
+    // Actualizo una categoría permitiendo cambios parciales.
+    @PutMapping("/categorias/{id}")
+    public ResponseEntity<?> actualizarCategoria(
+            @RequestHeader("email") String email,
+            @PathVariable Long id,
+            @RequestBody CategoriaServicioDTO dto) {
 
+        if (!esAdmin(email)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
+        }
+
+        CategoriaServicio datos = new CategoriaServicio(dto.categoria());
+        CategoriaServicio actualizada = categoriaService.actualizar(id, datos);
+
+        if (actualizada == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"mensaje\": \"Categoría no encontrada\"}");
+        }
+
+        return ResponseEntity.ok(CategoriaServicioMapper.toDTO(actualizada));
+    }
+
+    // Elimino una categoría devolviendo un mensaje claro al frontend.
+    @DeleteMapping("/categorias/{id}")
+    public ResponseEntity<?> eliminarCategoria(
+            @RequestHeader("email") String email,
+            @PathVariable Long id) {
+
+        if (!esAdmin(email)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
+        }
+
+        boolean eliminado = categoriaService.eliminar(id);
+
+        if (!eliminado) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"mensaje\": \"Categoría no encontrada\"}");
+        }
+
+        return ResponseEntity.ok("{\"mensaje\": \"Categoría eliminada correctamente\"}");
+    }
+
+    // ============================
+    // ADMIN — CRUD SUBSERVICIOS
+    // ============================
+
+    // Creo un subservicio asociándolo a una categoría existente.
+    @PostMapping("/subservicios")
+    public ResponseEntity<?> crearSubServicio(
+            @RequestHeader("email") String email,
+            @RequestParam Long categoriaId,
+            @RequestBody SubServicioDTO dto) {
+
+        if (!esAdmin(email)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
+        }
+
+        SubServicio nuevo = new SubServicio();
+        nuevo.setNombre(dto.nombre());
+        nuevo.setPrecio(dto.precio());
+
+        SubServicio creado = subServicioService.crear(categoriaId, nuevo);
+
+        if (creado == null) {
+            return ResponseEntity.badRequest().body("{\"mensaje\": \"Categoría inexistente\"}");
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(SubServicioMapper.toDTO(creado));
+    }
+
+    // Actualizo un subservicio permitiendo cambios parciales.
+    @PutMapping("/subservicios/{id}")
+    public ResponseEntity<?> actualizarSubServicio(
+            @RequestHeader("email") String email,
+            @PathVariable Long id,
+            @RequestBody SubServicioDTO dto) {
+
+        if (!esAdmin(email)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
+        }
+
+        SubServicio datos = new SubServicio();
+        datos.setNombre(dto.nombre());
+        datos.setPrecio(dto.precio());
+
+        SubServicio actualizado = subServicioService.actualizar(id, datos);
+
+        if (actualizado == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"mensaje\": \"Subservicio no encontrado\"}");
+        }
+
+        return ResponseEntity.ok(SubServicioMapper.toDTO(actualizado));
+    }
+
+    // Elimino un subservicio devolviendo un mensaje claro al frontend.
+    @DeleteMapping("/subservicios/{id}")
+    public ResponseEntity<?> eliminarSubServicio(
+            @RequestHeader("email") String email,
+            @PathVariable Long id) {
+
+        if (!esAdmin(email)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
+        }
+
+        boolean eliminado = subServicioService.eliminar(id);
+
+        if (!eliminado) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"mensaje\": \"Subservicio no encontrado\"}");
+        }
+
+        return ResponseEntity.ok("{\"mensaje\": \"Subservicio eliminado correctamente\"}");
+    }
 }
+

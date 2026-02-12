@@ -1,42 +1,58 @@
 package sapoCasaPrincesas.registro_login.catalogo.model;
 
-// Representa un subservicio individual dentro de una categoría (ej: "Peinado básico")
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "subservicios")
 public class SubServicio {
 
-    // Identificador único del subservicio
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    // Nombre del subservicio
+    // Mantengo este campo simple porque solo necesito el nombre visible del subservicio.
     private String nombre;
 
-    // Precio asociado al subservicio
-    private double precio;
+    // Decidí usar Double en lugar de double para permitir valores nulos
+    // y evitar errores cuando el precio no se envía en el DTO.
+    private Double precio;
 
-    // Constructor principal para crear el objeto con sus datos
-    public SubServicio(int id, String nombre, double precio) {
-        this.id = id;
-        this.nombre = nombre;
-        this.precio = precio;
+    // Relación muchos-a-uno: cada subservicio pertenece a una categoría.
+    // Uso JoinColumn para mantener la FK explícita en la base de datos.
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private CategoriaServicio categoria;
+
+    public Long getId() {
+        return id;
     }
 
-    public int getId() {
-        return id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public double getPrecio() {
-        return precio;
-    }
-
-    // Permiten modificar los datos cuando se hace un CRUD
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public void setPrecio(double precio) {
+    public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
         this.precio = precio;
     }
+
+    public CategoriaServicio getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoriaServicio categoria) {
+        this.categoria = categoria;
+    }
 }
+
