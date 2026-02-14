@@ -214,21 +214,25 @@ public class UsuarioService {
 
         String emailAdmin = "govelrodrigo@hotmail.com";
 
-        if (usuarioRepository.existsByEmail(emailAdmin)) {
-            return; // Si ya existe, no lo vuelvo a crear
+        Usuario admin = usuarioRepository.findByEmail(emailAdmin);
+
+        if (admin == null) {
+            // Si no existe, lo creo
+            admin = new Usuario();
+            admin.setNombre("Administrador");
+            admin.setApellidos("Principal");
+            admin.setEmail(emailAdmin);
+            admin.setRol("ADMIN");
         }
 
-        Usuario admin = new Usuario();
-        admin.setNombre("Administrador");
-        admin.setApellidos("Principal");
-        admin.setEmail(emailAdmin);
-        admin.setRol("ADMIN");
-        admin.setPasswordHash(passwordEncoder.encode("%admin#9876"));
+
+        admin.setPasswordHash(passwordEncoder.encode("scpAdmin#9876"));
 
         usuarioRepository.save(admin);
 
-        System.out.println(">>> ADMIN creado automáticamente");
+        System.out.println(">>> ADMIN actualizado/creado automáticamente");
     }
+
 
 }
 

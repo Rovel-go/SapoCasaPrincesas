@@ -7,6 +7,7 @@ import sapoCasaPrincesas.registro_login.catalogo.dto.SalonDTO;
 import sapoCasaPrincesas.registro_login.catalogo.model.Salon;
 import sapoCasaPrincesas.registro_login.catalogo.service.SalonService;
 import sapoCasaPrincesas.registro_login.catalogo.service.mapper.SalonMapper;
+import sapoCasaPrincesas.registro_login.config.AdminKeyValidator;
 
 import java.util.List;
 
@@ -16,12 +17,17 @@ import java.util.List;
 public class SalonController {
 
     private final SalonService service;
+    private final AdminKeyValidator adminKeyValidator;
 
-    public SalonController(SalonService service) {
+    public SalonController(SalonService service, AdminKeyValidator adminKeyValidator) {
         this.service = service;
+        this.adminKeyValidator = adminKeyValidator;
     }
 
-    // Uso este endpoint para listar todos los salones visibles en el catálogo.
+    // ============================
+    // GET — Público
+    // ============================
+
     @GetMapping
     public ResponseEntity<List<SalonDTO>> obtenerTodos() {
         List<SalonDTO> lista = service.obtenerTodos()
@@ -32,7 +38,6 @@ public class SalonController {
         return ResponseEntity.ok(lista);
     }
 
-    // Devuelvo 404 si el salón no existe para mantener respuestas claras al frontend.
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerPorId(@PathVariable Long id) {
         Salon salon = service.obtenerPorId(id);
@@ -45,7 +50,6 @@ public class SalonController {
         return ResponseEntity.ok(SalonMapper.toDTO(salon));
     }
 
-    // Permito búsqueda parcial por nombre para facilitar filtros dinámicos en el cliente.
     @GetMapping("/buscar/{nombre}")
     public ResponseEntity<?> buscarPorNombre(@PathVariable String nombre) {
 
@@ -62,9 +66,18 @@ public class SalonController {
         return ResponseEntity.ok(lista);
     }
 
-    // Creo un salón a partir del DTO para evitar exponer la entidad directamente.
+    // ============================
+    // POST — ADMIN
+    // ============================
+
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody SalonDTO dto) {
+    public ResponseEntity<?> crear(
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
+            @RequestBody SalonDTO dto) {
+
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
+        }
 
         Salon nuevo = new Salon(
                 null,
@@ -81,9 +94,19 @@ public class SalonController {
                 .body(SalonMapper.toDTO(guardado));
     }
 
-    // Actualizo solo los campos enviados en el DTO para permitir modificaciones parciales.
+    // ============================
+    // PUT — ADMIN
+    // ============================
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody SalonDTO dto) {
+    public ResponseEntity<?> actualizar(
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
+            @PathVariable Long id,
+            @RequestBody SalonDTO dto) {
+
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
+        }
 
         Salon datos = new Salon(
                 null,
@@ -104,9 +127,18 @@ public class SalonController {
         return ResponseEntity.ok(SalonMapper.toDTO(actualizado));
     }
 
-    // Devuelvo un mensaje claro para que el frontend pueda mostrar confirmación al usuario.
+    // ============================
+    // DELETE — ADMIN
+    // ============================
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> eliminar(
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
+            @PathVariable Long id) {
+
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
+        }
 
         boolean eliminado = service.eliminar(id);
 
@@ -118,4 +150,5 @@ public class SalonController {
         return ResponseEntity.ok("{\"mensaje\": \"Salón eliminado correctamente\"}");
     }
 }
+
 

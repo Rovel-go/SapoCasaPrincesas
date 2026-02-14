@@ -18,6 +18,8 @@ import sapoCasaPrincesas.registro_login.catalogo.service.mapper.SubServicioMappe
 import sapoCasaPrincesas.registro_login.usuarios.dao.UsuarioRepository;
 import sapoCasaPrincesas.registro_login.usuarios.model.Usuario;
 
+import sapoCasaPrincesas.registro_login.config.AdminKeyValidator;
+
 import java.util.List;
 
 @RestController
@@ -28,27 +30,22 @@ public class ServiciosController {
     private final CategoriaServicioService categoriaService;
     private final SubServicioService subServicioService;
     private final UsuarioRepository usuarioRepository;
+    private final AdminKeyValidator adminKeyValidator;
 
     public ServiciosController(CategoriaServicioService categoriaService,
                                SubServicioService subServicioService,
-                               UsuarioRepository usuarioRepository) {
+                               UsuarioRepository usuarioRepository,
+                               AdminKeyValidator adminKeyValidator) {
         this.categoriaService = categoriaService;
         this.subServicioService = subServicioService;
         this.usuarioRepository = usuarioRepository;
-    }
-
-    // Uso este método para validar si el usuario tiene rol ADMIN
-    // antes de permitir operaciones de creación, actualización o eliminación.
-    private boolean esAdmin(String email) {
-        Usuario usuario = usuarioRepository.findByEmail(email);
-        return usuario != null && "ADMIN".equals(usuario.getRol());
+        this.adminKeyValidator = adminKeyValidator;
     }
 
     // ============================
-    // GET — CLIENTE Y ADMIN
+    // GET — Público
     // ============================
 
-    // Devuelvo todas las categorías para construir el catálogo en el frontend.
     @GetMapping
     public ResponseEntity<List<CategoriaServicioDTO>> obtenerCategorias() {
         List<CategoriaServicioDTO> lista = categoriaService.obtenerTodas()
@@ -59,7 +56,6 @@ public class ServiciosController {
         return ResponseEntity.ok(lista);
     }
 
-    // Permito búsqueda parcial por nombre de categoría.
     @GetMapping("/categoria/{categoria}")
     public ResponseEntity<?> obtenerCategoria(@PathVariable String categoria) {
 
@@ -76,26 +72,7 @@ public class ServiciosController {
 
         return ResponseEntity.ok(lista);
     }
-    // Devuelvo lista de todos los subservicos de una categoria.
-    {/*//@GetMapping("/subservicios/categoria/{idCategoria}")
-    public ResponseEntity<?> obtenerSubserviciosPorCategoria(@PathVariable Long idCategoria) {
 
-        List<SubServicioDTO> lista = subServicioService
-                .obtenerPorCategoria(idCategoria)
-                .stream()
-                .map(SubServicioMapper::toDTO)
-                .toList();
-
-        if (lista.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("{\"mensaje\": \"No hay subservicios para esta categoría\"}");
-        }
-
-        return ResponseEntity.ok(lista);
-    }*/}
-
-    // Devuelvo todos los subservicios de una categoría por su id.
-// Este endpoint lo uso desde el frontend para desplegar la lista al hacer clic en una categoría.
     @GetMapping("/subservicios/categoria/{idCategoria}")
     public ResponseEntity<?> obtenerSubserviciosPorCategoria(@PathVariable Long idCategoria) {
 
@@ -113,9 +90,6 @@ public class ServiciosController {
         return ResponseEntity.ok(lista);
     }
 
-
-
-    // Devuelvo un subservicio por ID o 404 si no existe.
     @GetMapping("/subservicio/{id}")
     public ResponseEntity<?> obtenerSubServicioPorId(@PathVariable Long id) {
         SubServicio sub = subServicioService.obtenerPorId(id);
@@ -128,7 +102,6 @@ public class ServiciosController {
         return ResponseEntity.ok(SubServicioMapper.toDTO(sub));
     }
 
-    // Permito búsqueda parcial por nombre de subservicio.
     @GetMapping("/buscar/{nombre}")
     public ResponseEntity<?> buscarPorNombre(@PathVariable String nombre) {
 
@@ -149,14 +122,13 @@ public class ServiciosController {
     // ADMIN — CRUD CATEGORÍAS
     // ============================
 
-    // Creo una categoría validando primero que el usuario sea ADMIN.
     @PostMapping("/categorias")
     public ResponseEntity<?> crearCategoria(
-            @RequestHeader("email") String email,
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
             @RequestBody CategoriaServicioDTO dto) {
 
-        if (!esAdmin(email)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
         }
 
         try {
@@ -171,15 +143,14 @@ public class ServiciosController {
         }
     }
 
-    // Actualizo una categoría permitiendo cambios parciales.
     @PutMapping("/categorias/{id}")
     public ResponseEntity<?> actualizarCategoria(
-            @RequestHeader("email") String email,
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
             @PathVariable Long id,
             @RequestBody CategoriaServicioDTO dto) {
 
-        if (!esAdmin(email)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
         }
 
         CategoriaServicio datos = new CategoriaServicio(dto.categoria());
@@ -193,14 +164,13 @@ public class ServiciosController {
         return ResponseEntity.ok(CategoriaServicioMapper.toDTO(actualizada));
     }
 
-    // Elimino una categoría devolviendo un mensaje claro al frontend.
     @DeleteMapping("/categorias/{id}")
     public ResponseEntity<?> eliminarCategoria(
-            @RequestHeader("email") String email,
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
             @PathVariable Long id) {
 
-        if (!esAdmin(email)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
         }
 
         boolean eliminado = categoriaService.eliminar(id);
@@ -217,15 +187,14 @@ public class ServiciosController {
     // ADMIN — CRUD SUBSERVICIOS
     // ============================
 
-    // Creo un subservicio asociándolo a una categoría existente.
     @PostMapping("/subservicios")
     public ResponseEntity<?> crearSubServicio(
-            @RequestHeader("email") String email,
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
             @RequestParam Long categoriaId,
             @RequestBody SubServicioDTO dto) {
 
-        if (!esAdmin(email)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
         }
 
         SubServicio nuevo = new SubServicio();
@@ -242,15 +211,14 @@ public class ServiciosController {
                 .body(SubServicioMapper.toDTO(creado));
     }
 
-    // Actualizo un subservicio permitiendo cambios parciales.
     @PutMapping("/subservicios/{id}")
     public ResponseEntity<?> actualizarSubServicio(
-            @RequestHeader("email") String email,
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
             @PathVariable Long id,
             @RequestBody SubServicioDTO dto) {
 
-        if (!esAdmin(email)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
         }
 
         SubServicio datos = new SubServicio();
@@ -267,14 +235,13 @@ public class ServiciosController {
         return ResponseEntity.ok(SubServicioMapper.toDTO(actualizado));
     }
 
-    // Elimino un subservicio devolviendo un mensaje claro al frontend.
     @DeleteMapping("/subservicios/{id}")
     public ResponseEntity<?> eliminarSubServicio(
-            @RequestHeader("email") String email,
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
             @PathVariable Long id) {
 
-        if (!esAdmin(email)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"mensaje\": \"Acceso denegado\"}");
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
         }
 
         boolean eliminado = subServicioService.eliminar(id);
@@ -287,4 +254,6 @@ public class ServiciosController {
         return ResponseEntity.ok("{\"mensaje\": \"Subservicio eliminado correctamente\"}");
     }
 }
+
+
 

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sapoCasaPrincesas.registro_login.usuarios.dto.*;
 import sapoCasaPrincesas.registro_login.usuarios.service.UsuarioService;
+import sapoCasaPrincesas.registro_login.config.AdminKeyValidator;
 
 import java.util.List;
 
@@ -14,18 +15,22 @@ import java.util.List;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final AdminKeyValidator adminKeyValidator;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService, AdminKeyValidator adminKeyValidator) {
         this.usuarioService = usuarioService;
+        this.adminKeyValidator = adminKeyValidator;
     }
 
-    // Expongo este endpoint para obtener todos los usuarios sin revelar información sensible.
+    // ============================
+    // GET — Público
+    // ============================
+
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> obtenerTodos() {
         return ResponseEntity.ok(usuarioService.obtenerTodos());
     }
 
-    // Uso este método para consultar un usuario específico y devolverlo como DTO.
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> obtenerPorId(@PathVariable Long id) {
         UsuarioDTO usuario = usuarioService.obtenerPorId(id);
@@ -37,13 +42,13 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
-    // Manejo el registro devolviendo mensajes claros según la validación del servicio.
+    // ============================
+    // POST — Registro (PÚBLICO)
+    // ============================
+
     @PostMapping
     public ResponseEntity<String> registrar(@RequestBody UsuarioRegistroDTO dto) {
 
-        // El servicio devuelve:
-        // - String con mensaje de error
-        // - null si todo está OK
         String error = usuarioService.registrar(dto);
 
         if (error != null) {
@@ -54,13 +59,20 @@ public class UsuarioController {
                 .body("Usuario registrado correctamente");
     }
 
-    // Permito actualizar datos del usuario sin exponer la contraseña.
+    // ============================
+    // PUT — ADMIN
+    // ============================
+
     @PutMapping("/{id}")
     public ResponseEntity<String> actualizar(
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
             @PathVariable Long id,
             @RequestBody UsuarioDTO dto) {
 
-        // Valido el email aquí para evitar pasar datos inválidos al servicio.
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("Acceso denegado");
+        }
+
         if (dto.email() != null && !dto.email().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"))
             return ResponseEntity.badRequest().body("El formato del email es inválido");
 
@@ -74,7 +86,10 @@ public class UsuarioController {
         return ResponseEntity.ok("Usuario actualizado correctamente");
     }
 
-    // Manejo el login devolviendo el DTO del usuario si las credenciales son correctas.
+    // ============================
+    // POST — Login (PÚBLICO)
+    // ============================
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UsuarioLoginDTO dto) {
 
@@ -90,12 +105,14 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
-    // Expongo este endpoint para permitir que el usuario cambie su contraseña.
+    // ============================
+    // POST — Cambiar contraseña (PÚBLICO)
+    // ============================
+
     @PostMapping("/cambiar-contrasena")
     public ResponseEntity<String> cambiarContrasena(
             @RequestBody UsuarioCambioContrasenaDTO dto) {
 
-        // Realizo validaciones básicas antes de llamar al servicio.
         if (dto.email() == null || dto.email().isBlank())
             return ResponseEntity.badRequest().body("El email es obligatorio");
 
@@ -118,9 +135,18 @@ public class UsuarioController {
         return ResponseEntity.ok("Contraseña actualizada correctamente");
     }
 
-    // Permito eliminar usuarios devolviendo mensajes claros según el resultado.
+    // ============================
+    // DELETE — ADMIN
+    // ============================
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable Long id) {
+    public ResponseEntity<String> eliminar(
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
+            @PathVariable Long id) {
+
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("Acceso denegado");
+        }
 
         boolean eliminado = usuarioService.eliminar(id);
 
@@ -132,5 +158,4 @@ public class UsuarioController {
         return ResponseEntity.ok("Usuario eliminado correctamente");
     }
 }
-
 

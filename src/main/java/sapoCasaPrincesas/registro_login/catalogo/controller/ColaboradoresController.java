@@ -7,6 +7,7 @@ import sapoCasaPrincesas.registro_login.catalogo.dto.ColaboradorDTO;
 import sapoCasaPrincesas.registro_login.catalogo.model.Colaborador;
 import sapoCasaPrincesas.registro_login.catalogo.service.ColaboradorService;
 import sapoCasaPrincesas.registro_login.catalogo.service.mapper.ColaboradorMapper;
+import sapoCasaPrincesas.registro_login.config.AdminKeyValidator;
 
 import java.util.List;
 
@@ -16,12 +17,14 @@ import java.util.List;
 public class ColaboradoresController {
 
     private final ColaboradorService service;
+    private final AdminKeyValidator adminKeyValidator;
 
-    public ColaboradoresController(ColaboradorService service) {
+    public ColaboradoresController(ColaboradorService service, AdminKeyValidator adminKeyValidator) {
         this.service = service;
+        this.adminKeyValidator = adminKeyValidator;
     }
 
-    // Uso este endpoint para listar todos los colaboradores visibles en el catálogo.
+    // GET — Público
     @GetMapping
     public ResponseEntity<List<ColaboradorDTO>> obtenerTodos() {
         List<ColaboradorDTO> lista = service.obtenerTodos()
@@ -32,7 +35,6 @@ public class ColaboradoresController {
         return ResponseEntity.ok(lista);
     }
 
-    // Devuelvo 404 si el colaborador no existe para mantener respuestas claras al frontend.
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerPorId(@PathVariable Long id) {
         Colaborador col = service.obtenerPorId(id);
@@ -45,7 +47,6 @@ public class ColaboradoresController {
         return ResponseEntity.ok(ColaboradorMapper.toDTO(col));
     }
 
-    // Permito búsqueda parcial por nombre para facilitar filtros dinámicos en el cliente.
     @GetMapping("/buscar/{nombre}")
     public ResponseEntity<?> buscarPorNombre(@PathVariable String nombre) {
 
@@ -62,9 +63,15 @@ public class ColaboradoresController {
         return ResponseEntity.ok(lista);
     }
 
-    // Creo un colaborador a partir del DTO para evitar exponer la entidad directamente.
+    // POST — ADMIN
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody ColaboradorDTO dto) {
+    public ResponseEntity<?> crear(
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
+            @RequestBody ColaboradorDTO dto) {
+
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
+        }
 
         Colaborador nuevo = new Colaborador(
                 null,
@@ -81,9 +88,16 @@ public class ColaboradoresController {
                 .body(ColaboradorMapper.toDTO(guardado));
     }
 
-    // Actualizo solo los campos enviados en el DTO para permitir modificaciones parciales.
+    // PUT — ADMIN
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody ColaboradorDTO dto) {
+    public ResponseEntity<?> actualizar(
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
+            @PathVariable Long id,
+            @RequestBody ColaboradorDTO dto) {
+
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
+        }
 
         Colaborador datos = new Colaborador(
                 null,
@@ -104,9 +118,15 @@ public class ColaboradoresController {
         return ResponseEntity.ok(ColaboradorMapper.toDTO(actualizado));
     }
 
-    // Devuelvo un mensaje claro para que el frontend pueda mostrar confirmación al usuario.
+    // DELETE — ADMIN
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> eliminar(
+            @RequestHeader(value = "SAPO-ADMIN-KEY", required = false) String adminKey,
+            @PathVariable Long id) {
+
+        if (!adminKeyValidator.isValid(adminKey)) {
+            return ResponseEntity.status(403).body("{\"mensaje\": \"Acceso denegado\"}");
+        }
 
         boolean eliminado = service.eliminar(id);
 
@@ -118,4 +138,6 @@ public class ColaboradoresController {
         return ResponseEntity.ok("{\"mensaje\": \"Colaborador eliminado correctamente\"}");
     }
 }
+
+
 
