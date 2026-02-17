@@ -1,0 +1,15 @@
+html,
+body,
+#root {
+  /* Reseteo básico para que toda la app use el 100% del espacio disponible */
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh; /* asegura que la app siempre cubra la pantalla */
+}
+
+main {
+  /* Permite que el contenido principal crezca y empuje el footer hacia abajo */
+  flex: 1;
+  display: flex;
+}

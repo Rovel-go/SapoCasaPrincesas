@@ -1,0 +1,101 @@
+.layout-footer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+
+  /* Mucho más compacto */
+  padding: clamp(0.3rem, 1vw, 0.8rem) clamp(0.8rem, 2vw, 1.5rem);
+
+  gap: clamp(0.3rem, 2vw, 2rem);
+  overflow: hidden;
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.04); /* más sutil */
+  backdrop-filter: blur(4px); /* menos blur */
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.2);
+
+  color: rgb(201, 194, 194);
+}
+
+/* ================================
+   NAV CONTENEDOR
+================================ */
+.nosotros {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-height: 8vh; /* más bajo */
+  justify-content: center;
+  align-items: center;
+
+  overflow-x: auto;
+  white-space: nowrap;
+
+  padding: clamp(0.3rem, 1vw, 0.8rem);
+  box-sizing: border-box;
+
+  scrollbar-width: none;
+}
+
+.nosotros::-webkit-scrollbar {
+  display: none;
+}
+
+/* ================================
+   LISTA DE ENLACES
+================================ */
+.lista-nosotros {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  justify-content: center;
+
+  overflow-x: auto;
+  white-space: nowrap;
+
+  gap: clamp(0.3rem, 3vw, 2rem);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  scrollbar-width: none;
+}
+
+.lista-nosotros::-webkit-scrollbar {
+  display: none;
+}
+
+/* ================================
+   ITEMS
+================================ */
+.lista-nosotros li {
+  padding: clamp(0.1rem, 0.5vw, 0.4rem);
+}
+
+/* ================================
+   ENLACES
+================================ */
+.lista-nosotros a {
+  color: rgb(201, 194, 194);
+  text-decoration: none;
+
+  font-size: clamp(0.9rem, 2.5vw, 1.4rem); /* más pequeño */
+  font-weight: 500;
+  color: #2589b6;
+
+  transition: 0.3s ease;
+}
+
+/* ================================
+   HOVER
+================================ */
+.lista-nosotros a:hover {
+  color: #b6ed0d;
+  font-weight: bold;
+  transform: scale(1.08);
+}

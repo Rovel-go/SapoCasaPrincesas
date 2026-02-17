@@ -1,0 +1,116 @@
+/* Página general */
+.servicios-page,
+.salones-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: clamp(2rem, 4vw, 4rem);
+  background: transparent !important;
+  color: rgb(201, 194, 194);
+}
+
+/* Contenedor de tarjetas */
+.card-container,
+.salon-card-container {
+  display: flex;
+  gap: clamp(1.5rem, 2vw, 3rem);
+  flex-wrap: wrap;
+  justify-content: center;
+  width: min(95%, 1200px);
+}
+
+/* Tarjeta premium */
+.card1,
+.salon-card {
+  width: clamp(240px, 25vw, 300px);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(6px);
+
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+
+  color: rgb(201, 194, 194);
+
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card1:hover,
+.salon-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.25);
+}
+
+/* Imagen */
+.img-card1 img,
+.salon-img img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  background: #000;
+}
+
+/* Leyenda */
+.leyenda,
+.salon-leyenda {
+  padding: clamp(0.8rem, 1.5vw, 1.2rem);
+  text-align: center;
+}
+
+.leyenda h1,
+.salon-leyenda h1 {
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  margin: 0;
+  font-weight: 600;
+  color: rgb(201, 194, 194);
+}
+
+/* Detalle desplegable */
+.lista-subservicios,
+.salon-detalle,
+.detalle-subservicio {
+  max-height: 0;
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 clamp(0.8rem, 1.5vw, 1.2rem);
+  border-radius: 12px;
+}
+
+.lista-subservicios.open,
+.salon-detalle.open,
+.detalle-subservicio.open {
+  max-height: 300px;
+  padding: clamp(0.8rem, 1.5vw, 1.2rem);
+}
+
+/* Listas */
+.lista-subservicios,
+.salon-detalle ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lista-subservicios li,
+.salon-detalle ul li {
+  margin-bottom: 0.5rem;
+  color: rgb(201, 194, 194);
+  font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+  cursor: pointer;
+}
+
+/* Precio */
+.precio {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  color: #ffcc66;
+  margin-top: 10px;
+  font-weight: 600;
+}

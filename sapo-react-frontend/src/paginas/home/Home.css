@@ -1,0 +1,57 @@
+/* ================================
+   CONTENEDOR PRINCIPAL
+================================ */
+.home-container {
+  display: flex;
+  width: 100%;
+  height: calc(var(--vh) * 100);
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  color: rgb(201, 194, 194);
+}
+
+/* ================================
+   IMAGEN DE FONDO
+================================ */
+.home-imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.85); /* leve oscurecimiento para mejor lectura */
+}
+
+/* ================================
+   MENSAJE DE BIENVENIDA
+================================ */
+.mensaje-bienvenida {
+  position: absolute;
+  top: clamp(10px, 2vw, 20px);
+  left: clamp(10px, 2vw, 20px);
+  z-index: 10;
+
+  font-size: clamp(1rem, 2.5vw, 1.8rem);
+  font-weight: 600;
+  color: rgb(201, 194, 194);
+
+  opacity: 1;
+  transition: opacity 0.8s ease-in-out;
+}
+
+/* ================================
+   SALUDO AL USUARIO
+================================ */
+.saludo-usuario {
+  position: absolute;
+  top: clamp(45px, 6vw, 90px);
+  left: clamp(10px, 2vw, 20px);
+  z-index: 10;
+
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: rgb(201, 194, 194);
+
+  opacity: 1;
+  transition: opacity 0.8s ease-in-out;
+}

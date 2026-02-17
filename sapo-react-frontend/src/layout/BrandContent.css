@@ -1,0 +1,103 @@
+.brand-content {
+  /* Contenedor principal del branding (logo + texto).
+  Uso flex para acomodar la imagen y los textos uno al lado del otro. */
+
+  display: flex;
+  width: 100%;
+  height: auto;
+  max-height: 30vh; /* Limito la altura para que no ocupe demasiado espacio */
+  align-items: stretch;
+  justify-content: space-between;
+  gap: clamp(0.5rem, 2vw, 2rem); /* separación responsiva */
+  padding: clamp(0.5rem, 2vw, 2rem); /* padding responsivo */
+  box-sizing: border-box;
+}
+
+.princesita {
+  /* Contenedor de la imagen principal del logo */
+  width: 35%;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.princesita img {
+  /* La imagen se ajusta sin deformarse */
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  box-sizing: border-box;
+}
+
+.brand-assets {
+  /* Contenedor del texto del logo (Sapo + slogan) */
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: space-evenly;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.sapo {
+  /* Línea donde armo el texto "S A P O" con colores */
+  display: flex;
+  flex: 1;
+  width: 100%;
+  align-items: baseline; /* alineo las letras por la base para que se vean parejas */
+  justify-content: start;
+  gap: clamp(0.5rem, 3vw, 5rem);
+  padding-left: clamp(0.5rem, 2vw, 3rem);
+  box-sizing: border-box;
+}
+
+.green {
+  /* Letra principal del logo */
+  color: #b6ed0d;
+  font-size: clamp(2rem, 13vw, 8rem); /* tamaño muy responsivo */
+}
+
+.red {
+  color: #ef2804;
+}
+
+.yellow {
+  color: #e9d137;
+  font-size: 1rem; /* este tamaño se sobrescribe abajo con clamp */
+}
+
+.orange {
+  color: #d26101;
+}
+
+/* Unifico tamaños de las letras de colores */
+.red,
+.yellow,
+.orange {
+  font-size: clamp(2rem, 10vw, 5rem);
+}
+
+.slogan {
+  /* Contenedor del texto "Casa de Princesas" */
+  display: flex;
+  flex: 1;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+  gap: clamp(0.2rem, 5vw, 5rem);
+  padding-right: clamp(1.6rem, 5vw, 3rem);
+  box-sizing: border-box;
+}
+
+.casa-princesas {
+  /* Estilo del slogan final */
+  display: flex;
+  width: 100%;
+  justify-content: end;
+  font-family: "Pacifico", cursive; /* fuente decorativa */
+  color: #fff;
+  font-size: clamp(1.6rem, 5vw, 3rem);
+  padding-right: clamp(1rem, 4vw, 4rem);
+  box-sizing: border-box;
+}

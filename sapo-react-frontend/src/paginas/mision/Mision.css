@@ -1,0 +1,32 @@
+.mision-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  width: min(90%, 900px);
+  margin: 0 auto;
+  padding: clamp(1.5rem, 3vw, 3rem);
+
+  /* Fondo elegante y sutil */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(4px);
+
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+.mision-container h1 {
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-weight: 700;
+  margin-bottom: clamp(0.5rem, 1vw, 1rem);
+  color: rgb(201, 194, 194);
+}
+
+.mision-container p {
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  line-height: 1.6;
+  max-width: 700px;
+}
