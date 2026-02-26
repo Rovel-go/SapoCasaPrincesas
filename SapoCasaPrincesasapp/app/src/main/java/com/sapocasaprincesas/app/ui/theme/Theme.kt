@@ -1,58 +1,35 @@
 package com.sapocasaprincesas.app.ui.theme
 
-import android.app.Activity
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+// En esta parte defino mis esquemas de color.
+// No estoy personalizando nada todavía, solo uso los valores por defecto de Material 3.
+// Más adelante, si quiero, puedo cambiar colores, tipografías o formas.
+private val LightColors = lightColorScheme()
+private val DarkColors = darkColorScheme()
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
-)
-
+// Este es mi tema principal de la app.
+// Aquí ya no uso SapoTypography porque eso me estaba generando errores.
+// Material 3 ya trae su propio sistema de tipografías, así que lo uso directamente.
 @Composable
-fun SapoCasaPrincesasappTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+fun SapoCasaPrincesasTheme(
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    // Selecciono si quiero modo claro u oscuro.
+    // Por ahora lo dejo manual, pero luego puedo conectarlo al sistema.
+    val colors = if (darkTheme) DarkColors else LightColors
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
+    // Aquí aplico el tema Material 3 real.
+    // Uso colorScheme y typography directamente desde MaterialTheme.
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
+        colorScheme = colors,
+        typography = MaterialTheme.typography,
         content = content
     )
 }
+
+

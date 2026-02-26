@@ -1,65 +1,33 @@
-package com.sapocasaprincesas.app
+package com.sapocasaprincesas.app.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.sapocasaprincesas.app.ui.theme.SapoCasaPrincesasappTheme
+import androidx.compose.material3.Surface
+import com.sapocasaprincesas.app.navigation.AppNavigation
+import com.sapocasaprincesas.app.ui.theme.SapoCasaPrincesasTheme
+import androidx.navigation.compose.rememberNavController
 
+
+
+
+
+// Esta es mi actividad principal. Aquí inicializo toda mi app con Compose.
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        // Aquí defino el contenido de mi aplicación usando mi tema personalizado.
         setContent {
-            SapoCasaPrincesasappTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    BrandLogoScreen(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+            SapoCasaPrincesasTheme {
+                Surface {
+                    // Llamo a mi NavHost principal.
+                    AppNavigation(navController = rememberNavController())
+
+
                 }
             }
         }
     }
 }
-
-@Composable
-fun BrandLogoScreen(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.brandlogo),
-            contentDescription = "Brandlogo",
-            modifier = Modifier.size(250.dp)
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BrandLogoPreview() {
-    SapoCasaPrincesasappTheme {
-        BrandLogoScreen()
-    }
-}
-
-
-
-
-
-
-
-

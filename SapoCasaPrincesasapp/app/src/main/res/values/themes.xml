@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.SapoCasaPrincesasapp" parent="android:Theme.Material.Light.NoActionBar"/>
+
+    <!-- Tema universal que SIEMPRE existe -->
+    <style name="Theme.SapoCasaPrincesasapp" parent="android:Theme" />
+
 </resources>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
