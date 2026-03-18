@@ -32,7 +32,7 @@ export default function CambiarContrasena() {
 
     try {
       // Envío del correo al backend
-      const respuesta = await fetch("http://localhost:8081/api/recuperar", {
+      const respuesta = await fetch("https://backenddespliegue.fly.dev/api/recuperar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
