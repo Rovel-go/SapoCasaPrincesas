@@ -45,7 +45,7 @@ export default function Registro() {
 
     try {
       // Envío de datos al backend
-      const respuesta = await fetch("http://localhost:8081/api/registro", {
+      const respuesta = await fetch("https://backenddespliegue.fly.dev/api/registro", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
